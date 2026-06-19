@@ -1,0 +1,42 @@
+:root {
+    // Core tokens
+    --core--size--0: 0px;
+    --core--size--010: 1px;
+    --core--size--025: 2px;
+    --core--size--050: 4px;
+    --core--size--075: 6px;
+    --core--size--100: 8px;
+    --core--size--150: 12px;
+    --core--size--200: 16px;
+    --core--size--300: 24px;
+    --core--size--400: 32px;
+    --core--size--500: 40px;
+    --core--size--600: 48px;
+    --core--size--700: 56px;
+    --core--size--800: 64px;
+    --core--size--900: 72px;
+    --core--size--1000: 80px;
+
+    // Semantic tokens
+    --padding--none: var(--core--size--0) --padding--xxs: var(--core--size--025);
+    --padding--xs: var(--core--size--050);
+    --padding--sm: var(--core--size--075);
+    --padding--md: var(--core--size--100);
+    --padding--lg: var(--core--size--150);
+    --padding--xl: var(--core--size--200);
+    --padding--layout--md: var(--core--size--100);
+    --padding--layout--lg: var(--core--size--150);
+    --gap--xxs: var(--core--size--010);
+    --gap--xs: var(--core--size--025);
+    --gap--sm: var(--core--size--050);
+    --gap--md: var(--core--size--100);
+    --gap--lg: var(--core--size--150);
+    --gap--xl: var(--core--size--200);
+    --gap--xxl: var(--core--size--300);
+    --radius--none: var(--core--size--0);
+    --radius--xs: var(--core--size--025);
+    --radius--sm: var(--core--size--050);
+    --radius--md: var(--core--size--075);
+    --radius--lg: var(--core--size--100);
+    --radius--xl: var(--core--size--200);
+}

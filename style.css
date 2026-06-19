@@ -1,0 +1,12 @@
+/*
+Theme Name: Stolze Openair
+Theme URI: https://stolze-openair.ch
+Author: utill.ch
+Description: Native WordPress theme for the Stolze Openair festival site. Ported from the headless Next.js frontend to render the existing content model (jahr / artist / sponsor / foodtruck CPTs + ACF Pro) with visual parity.
+Version: 1.0.0
+Requires at least: 6.4
+Requires PHP: 8.0
+Text Domain: stolze
+*/
+
+/* Build artifacts are enqueued from dist/ via functions.php (Vite manifest). */

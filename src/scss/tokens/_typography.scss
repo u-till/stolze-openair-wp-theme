@@ -1,0 +1,163 @@
+@use 'breakpoints';
+
+// Large Typo
+@mixin typo__hero--lg {
+    font-size: 160px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+@mixin typo__headline-1--lg {
+    font-size: 105px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+@mixin typo__headline-2--lg {
+    font-size: 36px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+@mixin typo__headline-3--lg {
+    font-size: 22px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+@mixin typo__body--lg {
+    font-size: 20px;
+    line-height: 1.2;
+    font-weight: 400;
+}
+
+@mixin typo__button {
+    font-size: 20px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+// Medium Typo
+@mixin typo__hero--md {
+    font-size: 100px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+@mixin typo__headline-1--md {
+    font-size: 80px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+@mixin typo__headline-2--md {
+    font-size: 30px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+// Small Typo
+@mixin typo__hero--sm {
+    font-size: 64px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+@mixin typo__headline-1--sm {
+    font-size: 32px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+@mixin typo__headline-2--sm {
+    font-size: 24px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+@mixin typo__headline-3--sm {
+    font-size: 18px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+@mixin typo__body--sm {
+    font-size: 18px;
+    line-height: 1.2;
+    font-weight: 400;
+}
+
+@mixin typo__headline-2--xs {
+    font-size: 18px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+// Responsive Typo
+@mixin typo__hero {
+    @include typo__hero--sm;
+
+    @include breakpoints.tablet-up {
+        @include typo__hero--md();
+    }
+
+    @include breakpoints.desktop-up {
+        @include typo__hero--lg();
+    }
+}
+
+@mixin typo__headline-1 {
+    @include typo__headline-1--sm;
+
+    @include breakpoints.tablet-up {
+        @include typo__headline-1--md();
+    }
+
+    @include breakpoints.desktop-large-up {
+        @include typo__headline-1--lg();
+    }
+}
+
+@mixin typo__headline-2--sub {
+    @include typo__headline-2--xs;
+
+    @include breakpoints.tablet-up {
+        @include typo__headline-2--sm();
+    }
+
+    @include breakpoints.desktop-up {
+        @include typo__headline-2--md();
+    }
+
+    @include breakpoints.desktop-large-up {
+        @include typo__headline-2--lg();
+    }
+}
+
+@mixin typo__headline-2 {
+    @include typo__headline-2--sm;
+
+    @include breakpoints.desktop-up {
+        @include typo__headline-2--md();
+    }
+
+    @include breakpoints.desktop-large-up {
+        @include typo__headline-2--lg();
+    }
+}
+
+@mixin typo__headline-3 {
+    @include typo__headline-3--sm;
+
+    @include breakpoints.desktop-large-up {
+        @include typo__headline-3--lg();
+    }
+}
+
+@mixin typo__body {
+    @include typo__body--sm;
+
+    @include breakpoints.desktop-large-up {
+        @include typo__body--lg();
+    }
+}
