@@ -5,6 +5,8 @@
  * Overrides WooCommerce's archive-product.php with custom markup (the bordered
  * grid used elsewhere on the site). No DB/content changes.
  *
+ * @version 8.6.0
+ *
  * @package stolze
  */
 
@@ -13,6 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 get_header();
+
+do_action( 'woocommerce_before_main_content' );
 
 // Use the most recent year's logo in the section title, for visual continuity.
 $shop_year = stolze_latest_year();
@@ -27,10 +31,11 @@ if ( have_posts() ) {
 	}
 }
 ?>
-<main class="shop">
+<div class="shop">
 	<?php stolze_section_title( woocommerce_page_title( false ) ? woocommerce_page_title( false ) : 'Shop', $shop_logo ); ?>
 
 	<?php if ( ! empty( $shop_products ) ) : ?>
+		<?php do_action( 'woocommerce_before_shop_loop' ); ?>
 		<div class="shop-grid">
 			<div class="grid">
 				<div class="grid__inner">
@@ -71,9 +76,13 @@ if ( have_posts() ) {
 			);
 			?>
 		</div>
+		<?php do_action( 'woocommerce_after_shop_loop' ); ?>
 	<?php else : ?>
+		<?php do_action( 'woocommerce_no_products_found' ); ?>
 		<p class="shop-empty">Zurzeit sind keine Produkte verfügbar.</p>
 	<?php endif; ?>
-</main>
+</div>
 <?php
+do_action( 'woocommerce_after_main_content' );
+
 get_footer();

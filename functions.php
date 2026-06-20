@@ -90,6 +90,32 @@ function stolze_module_type( $tag, $handle ) {
 add_filter( 'script_loader_tag', 'stolze_module_type', 10, 2 );
 
 /**
+ * The cart-count badge markup for the header cart icon.
+ *
+ * Shared by header.php and the AJAX fragment so they stay byte-identical; the
+ * `is-empty` class hides the badge (in CSS) when the cart is empty.
+ *
+ * @return string
+ */
+function stolze_cart_count_badge() {
+	$count = ( function_exists( 'WC' ) && WC()->cart ) ? WC()->cart->get_cart_contents_count() : 0;
+	$class = 'cart-contents-count' . ( $count > 0 ? '' : ' is-empty' );
+	return '<span class="' . esc_attr( $class ) . '">' . esc_html( $count ) . '</span>';
+}
+
+/**
+ * Keep the header cart-count badge in sync after AJAX add-to-cart.
+ *
+ * @param array $fragments Cart fragments keyed by selector.
+ * @return array
+ */
+function stolze_cart_count_fragment( $fragments ) {
+	$fragments['span.cart-contents-count'] = stolze_cart_count_badge();
+	return $fragments;
+}
+add_filter( 'woocommerce_add_to_cart_fragments', 'stolze_cart_count_fragment' );
+
+/**
  * Festival favicon set (ported from the Next.js layout head).
  */
 function stolze_favicons() {

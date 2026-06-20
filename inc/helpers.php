@@ -127,6 +127,24 @@ function stolze_image_url( $img, $size = 'large' ) {
 }
 
 /**
+ * Sanitize a color value before using it in inline CSS.
+ *
+ * ACF color picker fields should return hex colors. If an editor/plugin returns
+ * anything else, drop it instead of allowing arbitrary CSS into a style attr.
+ *
+ * @param mixed $value Raw color value.
+ * @return string Sanitized hex color, or empty string.
+ */
+function stolze_sanitize_color( $value ) {
+	if ( ! is_string( $value ) ) {
+		return '';
+	}
+
+	$color = sanitize_hex_color( trim( $value ) );
+	return $color ? $color : '';
+}
+
+/**
  * Render a section title band (logo / wordmark + uppercase heading).
  *
  * The heading id is the lower-cased title so the menu-top anchors (#lineup,
@@ -175,12 +193,43 @@ function stolze_section_title( $title, $logo_url = '', $inverse = false ) {
  */
 function stolze_year_theme_vars( $f ) {
 	$out = array();
-	if ( ! empty( $f['background_color'] ) ) {
-		$out[] = 'background-color:' . $f['background_color'];
+	$bg  = stolze_sanitize_color( $f['background_color'] ?? '' );
+	$pri = stolze_sanitize_color( $f['primary_color'] ?? '' );
+	if ( $bg ) {
+		$out[] = 'background-color:' . $bg;
 	}
-	if ( ! empty( $f['primary_color'] ) ) {
-		$out[] = '--color--primary:' . $f['primary_color'];
-		$out[] = '--primary-hover-color:' . $f['primary_color'];
+	if ( $pri ) {
+		$out[] = '--color--primary:' . $pri;
+		$out[] = '--primary-hover-color:' . $pri;
+	}
+	return implode( ';', $out );
+}
+
+/**
+ * Global theme vars for pages that are NOT tied to a year (shop, cart, Infos…).
+ *
+ * Unlike stolze_year_theme_vars() — which sets `background-color` on the year's
+ * <main> — this overrides the CSS *variables* on the <body> so every wrapper
+ * that reads `var(--color--background--main)` / `var(--color--primary)` (page
+ * bodies, the shop, section titles, links) inherits the most recent year's
+ * palette automatically. Applied in header.php on non-year views.
+ *
+ * @return string Inline style attribute value (without the attribute name).
+ */
+function stolze_global_theme_vars() {
+	$year = stolze_latest_year();
+	if ( ! $year ) {
+		return '';
+	}
+	$out = array();
+	$bg  = stolze_sanitize_color( get_field( 'background_color', $year->ID ) );
+	$pri = stolze_sanitize_color( get_field( 'primary_color', $year->ID ) );
+	if ( $bg ) {
+		$out[] = '--color--background--main:' . $bg;
+	}
+	if ( $pri ) {
+		$out[] = '--color--primary:' . $pri;
+		$out[] = '--primary-hover-color:' . $pri;
 	}
 	return implode( ';', $out );
 }

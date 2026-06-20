@@ -23,8 +23,132 @@ body {
     margin: 0;
 }
 
+// Links inherit the theme palette instead of the browser's blue/purple defaults.
+// Components that need their own treatment (nav, buttons, cards, footer) set their
+// own colour at higher specificity and still win.
+a {
+    color: var(--color--text);
+    text-decoration-color: var(--color--primary);
+    transition: color 0.15s ease;
+
+    &:hover {
+        color: var(--color--primary);
+    }
+}
+
 .site-header {
     z-index: 999;
+}
+
+// Festival push-button — the "Unterstütze uns" effect on a single element.
+// A hard offset box-shadow sits behind the bordered pill; on hover/press the pill
+// slides into the shadow (translate + shadow shrinks to 0) so it reads as pushed
+// in, like a physical button. Works on any <button>/<a> without inner markup.
+@mixin so-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 13px;
+    padding: 16px 24px;
+    border: 2px solid var(--color--text);
+    background: var(--color--background--main);
+    color: var(--color--text);
+    border-radius: 48px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.1;
+    font-family: inherit;
+    text-decoration: none;
+    text-transform: uppercase;
+    box-shadow: 3px 3px 0 0 var(--color--text);
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+
+    &:hover,
+    &:active {
+        transform: translate(3px, 3px);
+        background: var(--color--background--main);
+        color: var(--color--text);
+        box-shadow: 0 0 0 0 var(--color--text);
+    }
+
+    &:disabled,
+    &.disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: 3px 3px 0 0 var(--color--text);
+    }
+}
+
+// Alias kept for readability where a secondary action is intended.
+@mixin so-pill--outline {
+    @include so-pill;
+}
+
+// Bordered text input shared by checkout fields, coupon + account forms.
+@mixin so-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid var(--color--text);
+    border-radius: 8px;
+    background: var(--color--background--main);
+    color: var(--color--text);
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 1.3;
+    box-shadow: none;
+
+    &:focus {
+        outline: none;
+        border-color: var(--color--primary);
+    }
+}
+
+// WooCommerce notices — festival panel with a pill action button.
+.woocommerce-message,
+.woocommerce-info,
+.woocommerce-error {
+    position: relative;
+    list-style: none;
+    margin: 0 0 16px;
+    padding: 14px 18px;
+    border: 2px solid var(--color--text);
+    border-radius: 12px;
+    background: var(--color--text--inverse);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-weight: 600;
+    color: var(--color--text);
+
+    // WC injects an absolutely-positioned icon-font glyph that collides with our
+    // flex layout (the "blob" over the text) — drop it for a clean panel.
+    &::before {
+        display: none !important;
+        content: none !important;
+    }
+
+    // Beat WC's `.woocommerce a.button` (grey) at equal specificity + !important.
+    a.button,
+    .button {
+        @include so-pill;
+        float: none;
+        margin: 0;
+        padding: 10px 20px;
+        font-size: 14px;
+        background: var(--color--background--main) !important;
+        color: var(--color--text) !important;
+        border-color: var(--color--text) !important;
+    }
+}
+
+.woocommerce-error {
+    border-color: #cc1818;
 }
 
 // ---------------------------------------------------------------------------
@@ -1130,6 +1254,22 @@ span.button {
 .shop-grid {
     @extend %so-grid;
 
+    // Shop stays single-column on phones (overrides the shared grid's 2-up at
+    // phone-up) so each product reads large; 3-up tablet / 4-up desktop remain.
+    .grid-row {
+        @include breakpoints.phone-up {
+            grid-template-columns: repeat(1, 100%);
+        }
+
+        @include breakpoints.tablet-up {
+            grid-template-columns: repeat(3, 33.3333%);
+        }
+
+        @include breakpoints.desktop-up {
+            grid-template-columns: repeat(4, 25%);
+        }
+    }
+
     // Product photos fill the cell; the meta bar overlays the bottom.
     .grid-item {
         padding: 0;
@@ -1210,6 +1350,24 @@ span.button {
 // ---------------------------------------------------------------------------
 .single-product {
     background: var(--color--background--main);
+
+    // Add-to-cart notice: inset to the product content gutter so it lines up
+    // with the gallery/summary and never runs under the fixed years nav.
+    .product-notices {
+        padding: 16px 40px 0;
+
+        @include breakpoints.tablet-up {
+            padding: 20px 80px 0;
+        }
+
+        @include breakpoints.desktop-up {
+            padding: 24px 120px 0;
+        }
+
+        &:empty {
+            display: none;
+        }
+    }
 
     .back-to-shop {
         padding: 24px 40px 0;
@@ -1440,54 +1598,464 @@ span.button {
         font-size: 1rem;
     }
 
-    // Extra ancestor class so this beats WC's default `.woocommerce button.button`.
+    // Festival push-button. WC's `.button.alt` rule (#7f54b3 purple) matches at the
+    // same specificity, so the colour props are forced with !important to win
+    // regardless of plugin load order / the `.alt` + `wp-element-button` variants.
     .product-summary__cart .single_add_to_cart_button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 14px 28px;
-        border: 2px solid var(--color--text);
-        background: var(--color--text);
-        color: var(--color--text--inverse);
-        border-radius: 48px;
-        cursor: pointer;
-        font-weight: 600;
+        @include so-pill;
         font-size: 18px;
-        font-family: inherit;
-        text-decoration: none;
-        text-transform: uppercase;
-        transition: transform 0.15s ease;
+        background: var(--color--background--main) !important;
+        color: var(--color--text) !important;
+        border-color: var(--color--text) !important;
+        box-shadow: 3px 3px 0 0 var(--color--text) !important;
 
-        &:hover {
-            transform: translate(2px, 2px);
-            background: var(--color--text);
-            color: var(--color--text--inverse);
-        }
-
-        &:disabled,
-        &.disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: none;
+        &:hover,
+        &:active {
+            background: var(--color--background--main) !important;
+            color: var(--color--text) !important;
+            box-shadow: 0 0 0 0 var(--color--text) !important;
         }
     }
 
+    // Description now lives inside the summary column, below add-to-cart.
     .product-description {
-        padding-bottom: 48px;
+        margin-top: 8px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(0, 0, 0, 0.15);
+        text-align: left;
+
+        // The shared .content-section is centered + width-capped for full-width
+        // page bodies; in this column it should be flush-left and full width.
+        .content-section {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+            text-align: left;
+        }
+
+        // Honour the left-align request even for blocks the editor centered.
+        .has-text-align-center,
+        [style*='text-align:center'],
+        [style*='text-align: center'] {
+            text-align: left !important;
+        }
+    }
+
+    .product-description__title {
+        margin: 0 0 8px;
+        text-transform: uppercase;
+        @include typography.typo__headline-3;
     }
 }
 
-// WooCommerce notices
-.woocommerce-message,
-.woocommerce-info,
-.woocommerce-error {
-    list-style: none;
-    margin: 0 0 16px;
-    padding: 12px 16px;
-    border: 1px solid var(--color--text);
-    background: var(--color--text--inverse);
+.woo-page {
+    background: var(--color--background--main);
+    padding-bottom: 64px;
 
+    .entry-content {
+        margin-top: 16px;
+    }
+
+    a {
+        color: var(--color--text);
+        text-decoration-color: var(--color--primary);
+
+        &:hover {
+            color: var(--color--primary);
+        }
+    }
+
+    // -- Shared block-button component (cart + checkout primary actions) -------
+    .wc-block-components-button.contained,
+    .wc-block-components-button:not(.wc-block-components-button--text) {
+        @include so-pill;
+        width: auto;
+    }
+
+    // -- Classic buttons (account, coupon, etc.) ------------------------------
+    .button,
+    button.button,
+    input.button,
+    a.button,
+    .woocommerce-button {
+        @include so-pill;
+    }
+
+    // -- Form fields ----------------------------------------------------------
+    input[type='text'],
+    input[type='email'],
+    input[type='tel'],
+    input[type='password'],
+    input[type='number'],
+    input[type='search'],
+    select,
+    textarea,
+    .wc-block-components-text-input input,
+    .input-text {
+        @include so-input;
+    }
+
+    .wc-block-components-text-input {
+        // Block UI uses a floating label; keep it readable on our bg.
+        label,
+        .wc-block-components-text-input__label {
+            color: var(--color--text);
+        }
+    }
+
+    // Quantity stepper (cart line items + add-to-cart).
+    .wc-block-components-quantity-selector {
+        border: 2px solid var(--color--text);
+        border-radius: 8px;
+        overflow: hidden;
+
+        input,
+        .wc-block-components-quantity-selector__input {
+            border: none;
+            border-radius: 0;
+            text-align: center;
+        }
+
+        button {
+            background: transparent;
+            color: var(--color--text);
+            border: none;
+            font-weight: 700;
+
+            &:hover {
+                color: var(--color--primary);
+            }
+        }
+    }
+}
+
+// -- Cart block ---------------------------------------------------------------
+.woo-page {
+    .wc-block-cart,
+    .wp-block-woocommerce-cart {
+        margin-top: 0;
+    }
+
+    // One tidy totals panel (title + totals + checkout button). align-self:start
+    // stops the sidebar stretching to the items-column height — that stretch was
+    // the giant empty box in the screenshot. Inner totals wrappers lose their
+    // border so there's no double frame.
+    .wc-block-cart__sidebar,
+    .wc-block-components-sidebar {
+        align-self: start;
+        border: 2px solid var(--color--text);
+        border-radius: 12px;
+        background: var(--color--text--inverse);
+        padding: 20px;
+    }
+
+    .wc-block-cart__sidebar .wc-block-components-totals-wrapper {
+        border: none;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .wc-block-cart-items {
+        thead th {
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+        }
+    }
+
+    .wc-block-components-product-name {
+        font-weight: 600;
+        text-transform: uppercase;
+        text-decoration: none;
+    }
+
+    .wc-block-cart__submit-container .wc-block-cart__submit-button,
+    .wc-block-cart__submit-button {
+        @include so-pill;
+        width: 100%;
+        margin-top: 12px;
+    }
+
+    .wc-block-components-totals-item__value {
+        font-weight: 600;
+    }
+}
+
+// -- Checkout block -----------------------------------------------------------
+.woo-page {
+    .wc-block-checkout__sidebar,
+    .wc-block-components-checkout-order-summary {
+        align-self: start;
+        border: 2px solid var(--color--text);
+        border-radius: 12px;
+        background: var(--color--text--inverse);
+    }
+
+    .wc-block-components-checkout-step {
+        border: none;
+    }
+
+    .wc-block-components-checkout-step__title,
+    .wc-block-components-title {
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+
+    .wc-block-checkout__actions_row,
+    .wc-block-components-checkout-place-order-button {
+        .wc-block-components-button,
+        &.wc-block-components-button {
+            @include so-pill;
+            width: 100%;
+        }
+    }
+}
+
+// -- My account (classic shortcode markup) ------------------------------------
+.woo-page {
+    .woocommerce {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+
+        @include breakpoints.tablet-up {
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 48px;
+        }
+    }
+
+    .woocommerce-MyAccount-navigation {
+        flex: 0 0 220px;
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        li {
+            margin: 0;
+
+            a {
+                display: block;
+                padding: 10px 14px;
+                font-weight: 600;
+                text-transform: uppercase;
+                text-decoration: none;
+                border: 2px solid transparent;
+                border-radius: 8px;
+
+                &:hover {
+                    border-color: var(--color--text);
+                    color: var(--color--text);
+                }
+            }
+
+            &.is-active a {
+                border-color: var(--color--text);
+                background: var(--color--text);
+                color: var(--color--text--inverse);
+            }
+        }
+    }
+
+    .woocommerce-MyAccount-content {
+        flex: 1 1 auto;
+        min-width: 0;
+
+        a {
+            font-weight: 600;
+        }
+    }
+
+    // Login / register / address forms.
+    form {
+        .form-row {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+    }
+
+    // Orders / downloads tables.
+    table.woocommerce-table,
+    table.shop_table,
+    table.account-orders-table {
+        width: 100%;
+        border-collapse: collapse;
+
+        th,
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+            text-align: left;
+        }
+
+        th {
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// WooCommerce default product grids — global festival card skin.
+//
+// WC's block + classic markup (cart cross-sells "Neu im Shop", related products,
+// [products] shortcodes) doesn't go through our custom archive template, so it
+// arrives unstyled. Re-skin it everywhere into bordered festival cards matching
+// the shop archive, so any WC-rendered product grid looks on-brand.
+// ---------------------------------------------------------------------------
+.wc-block-grid__products,
+ul.products {
+    list-style: none;
+    margin: 24px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+
+    @include breakpoints.tablet-up {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+.wc-block-grid__product,
+ul.products li.product {
+    margin: 0;
+    padding: 14px;
+    width: auto;
+    float: none;
+    list-style: none;
+    text-align: center;
+    border: 2px solid var(--color--text);
+    border-radius: 12px;
+    background: var(--color--background--main);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+    // Image fills the top of the card.
+    .wc-block-grid__product-image,
+    .attachment-woocommerce_thumbnail,
+    img {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border: none;
+        border-radius: 6px;
+    }
+
+    .wc-block-grid__product-link,
+    > a {
+        display: block;
+        width: 100%;
+        text-decoration: none;
+        color: var(--color--text);
+    }
+
+    .wc-block-grid__product-title,
+    .woocommerce-loop-product__title {
+        margin: 0;
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: uppercase;
+        color: var(--color--text);
+    }
+
+    .wc-block-grid__product-price,
+    .price {
+        margin: 0;
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--color--text);
+    }
+
+    // The card's add-to-cart / choose-options button → festival pill.
+    .wc-block-grid__product-add-to-cart .button,
+    .wp-block-button__link,
+    .add_to_cart_button,
     .button {
-        float: right;
+        @include so-pill;
+        margin-top: auto;
+        padding: 10px 18px;
+        font-size: 14px;
+    }
+}
+
+// Defensive: strip any stray WC wrapper border/outline on the cart shells so the
+// empty-cart state reads as a clean festival panel, and re-skin notice banners.
+.woo-page {
+    .wp-block-woocommerce-cart,
+    .wc-block-cart,
+    .wc-block-cart__empty-cart,
+    .wp-block-woocommerce-empty-cart-block {
+        border: none;
+        outline: none;
+    }
+
+    .wc-block-components-notice-banner {
+        border-radius: 8px;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Header — Shop menu item + cart icon (in the always-visible menu-bottom nav).
+// The cart icon sits inline, just behind the (CMS-managed) Shop link.
+// ---------------------------------------------------------------------------
+.menu-shop {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.cart-contents {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    line-height: 0;
+    color: var(--color--text);
+
+    &:hover {
+        color: var(--color--primary);
+    }
+
+    .cart-icon {
+        display: block;
+        width: 18px;
+        height: 18px;
+    }
+
+    .cart-contents-count {
+        position: absolute;
+        top: -7px;
+        right: -9px;
+        min-width: 17px;
+        height: 17px;
+        padding: 0 4px;
+        border-radius: 999px;
+        background: var(--color--primary);
+        color: var(--color--text--inverse);
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 17px;
+        text-align: center;
+        font-variant-numeric: tabular-nums;
+
+        &.is-empty {
+            display: none;
+        }
     }
 }

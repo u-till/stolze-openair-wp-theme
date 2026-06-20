@@ -17,6 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return WP_Post|null
  */
 function stolze_latest_year() {
+	$cached = wp_cache_get( 'latest_year', 'stolze' );
+	if ( false !== $cached ) {
+		return $cached;
+	}
+
 	$q = new WP_Query(
 		array(
 			'post_type'      => 'jahr',
@@ -26,7 +31,9 @@ function stolze_latest_year() {
 			'no_found_rows'  => true,
 		)
 	);
-	return $q->have_posts() ? $q->posts[0] : null;
+	$year = $q->have_posts() ? $q->posts[0] : null;
+	wp_cache_set( 'latest_year', $year, 'stolze' );
+	return $year;
 }
 
 /**
@@ -36,6 +43,17 @@ function stolze_latest_year() {
  * @return WP_Post|null
  */
 function stolze_year_by_title( $year ) {
+	$year = preg_replace( '/[^0-9]/', '', (string) $year );
+	if ( '' === $year ) {
+		return null;
+	}
+
+	$cache_key = 'year_by_title_' . $year;
+	$cached    = wp_cache_get( $cache_key, 'stolze' );
+	if ( false !== $cached ) {
+		return $cached;
+	}
+
 	$q = new WP_Query(
 		array(
 			'post_type'      => 'jahr',
@@ -44,7 +62,9 @@ function stolze_year_by_title( $year ) {
 			'no_found_rows'  => true,
 		)
 	);
-	return $q->have_posts() ? $q->posts[0] : null;
+	$post = $q->have_posts() ? $q->posts[0] : null;
+	wp_cache_set( $cache_key, $post, 'stolze' );
+	return $post;
 }
 
 /**
@@ -53,10 +73,15 @@ function stolze_year_by_title( $year ) {
  * @return WP_Post[]
  */
 function stolze_all_years() {
+	$cached = wp_cache_get( 'all_years', 'stolze' );
+	if ( false !== $cached ) {
+		return $cached;
+	}
+
 	$q = new WP_Query(
 		array(
 			'post_type'      => 'jahr',
-			'posts_per_page' => -1,
+			'posts_per_page' => 200,
 			'no_found_rows'  => true,
 		)
 	);
@@ -67,6 +92,7 @@ function stolze_all_years() {
 			return (int) $b->post_title <=> (int) $a->post_title;
 		}
 	);
+	wp_cache_set( 'all_years', $years, 'stolze' );
 	return $years;
 }
 
@@ -83,22 +109,42 @@ function stolze_all_years() {
  * @return WP_Post[]
  */
 function stolze_by_year( $post_type, $year_id, $orderby = 'date' ) {
-	$q = new WP_Query(
-		array(
-			'post_type'      => $post_type,
-			'posts_per_page' => -1,
-			'orderby'        => $orderby,
-			'order'          => 'ASC',
-			'no_found_rows'  => true,
-			'meta_query'     => array(
-				array(
-					'key'     => 'jahr',
-					'value'   => '"' . (int) $year_id . '"',
-					'compare' => 'LIKE',
-				),
+	$allowed_post_types = array( 'artist', 'sponsor', 'foodtruck' );
+	if ( ! in_array( $post_type, $allowed_post_types, true ) ) {
+		return array();
+	}
+
+	$year_id   = (int) $year_id;
+	$cache_key = 'by_year_' . $post_type . '_' . $year_id . '_' . sanitize_key( $orderby );
+	$cached    = wp_cache_get( $cache_key, 'stolze' );
+	if ( false !== $cached ) {
+		return $cached;
+	}
+
+	$args = array(
+		'post_type'      => $post_type,
+		'posts_per_page' => 200,
+		'orderby'        => $orderby,
+		'order'          => 'ASC',
+		'no_found_rows'  => true,
+		'meta_query'     => array(
+			array(
+				'key'     => 'jahr',
+				'value'   => '"' . $year_id . '"',
+				'compare' => 'LIKE',
 			),
-		)
+		),
 	);
+
+	if ( 'slot' === $orderby ) {
+		$args['meta_key'] = 'slot';
+		$args['orderby']  = 'meta_value';
+	}
+
+	$q = new WP_Query(
+		$args
+	);
+	wp_cache_set( $cache_key, $q->posts, 'stolze' );
 	return $q->posts;
 }
 
@@ -109,14 +155,7 @@ function stolze_by_year( $post_type, $year_id, $orderby = 'date' ) {
  * @return WP_Post[]
  */
 function stolze_artists_for_year( $year_id ) {
-	$artists = stolze_by_year( 'artist', $year_id );
-	usort(
-		$artists,
-		static function ( $a, $b ) {
-			return strcmp( (string) get_post_meta( $a->ID, 'slot', true ), (string) get_post_meta( $b->ID, 'slot', true ) );
-		}
-	);
-	return $artists;
+	return stolze_by_year( 'artist', $year_id, 'slot' );
 }
 
 /**
@@ -125,21 +164,23 @@ function stolze_artists_for_year( $year_id ) {
  * @return WP_Post[]
  */
 function stolze_all_artists() {
-	$q       = new WP_Query(
+	$cached = wp_cache_get( 'all_artists', 'stolze' );
+	if ( false !== $cached ) {
+		return $cached;
+	}
+
+	$q = new WP_Query(
 		array(
 			'post_type'      => 'artist',
-			'posts_per_page' => -1,
+			'posts_per_page' => 300,
+			'meta_key'       => 'slot',
+			'orderby'        => 'meta_value',
+			'order'          => 'DESC',
 			'no_found_rows'  => true,
 		)
 	);
-	$artists = $q->posts;
-	usort(
-		$artists,
-		static function ( $a, $b ) {
-			return strcmp( (string) get_post_meta( $b->ID, 'slot', true ), (string) get_post_meta( $a->ID, 'slot', true ) );
-		}
-	);
-	return $artists;
+	wp_cache_set( 'all_artists', $q->posts, 'stolze' );
+	return $q->posts;
 }
 
 /**
