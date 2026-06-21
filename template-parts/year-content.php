@@ -24,6 +24,7 @@ $f         = get_fields( $jahr->ID );
 $logo_url  = stolze_image_url( $f['logo'] ?? null, 'large' );
 $poster    = stolze_image_url( $f['poster'] ?? null, 'large' );
 $poster_d  = stolze_image_url( $f['poster_desktop'] ?? null, 'full' );
+$poster_alt = stolze_image_alt( $f['poster'] ?? null, 'Stolze Openair ' . $jahr->post_title . ' Festivalplakat' );
 $daten     = $f['daten'] ?? array();
 $side      = $f['side_events_info'] ?? '';
 $gallery   = $f['gallery'] ?? array();
@@ -52,7 +53,7 @@ $fallback_logo = STOLZE_URI . '/assets/stolze_2024_logo.png';
 				<?php if ( $poster_d ) : ?>
 					<source media="(min-width: 768px)" srcset="<?php echo esc_url( $poster_d ); ?>" />
 				<?php endif; ?>
-				<img src="<?php echo esc_url( $poster ? $poster : $poster_d ); ?>" alt="Hero Image" />
+				<img src="<?php echo esc_url( $poster ? $poster : $poster_d ); ?>" alt="<?php echo esc_attr( $poster_alt ); ?>" />
 			</picture>
 		</div>
 	<?php endif; ?>
@@ -70,15 +71,17 @@ $fallback_logo = STOLZE_URI . '/assets/stolze_2024_logo.png';
 			foreach ( $artists as $artist ) :
 				$slot  = get_post_meta( $artist->ID, 'slot', true );
 				$buhne = get_post_meta( $artist->ID, 'buhne', true );
-				$img   = get_the_post_thumbnail_url( $artist->ID, 'large' );
+				$img_id = get_post_thumbnail_id( $artist->ID );
+				$img    = $img_id ? wp_get_attachment_image_url( $img_id, 'large' ) : '';
 				$img   = $img ? $img : $fallback_logo;
+				$img_alt = $img_id ? stolze_image_alt( $img_id, $artist->post_title ) : 'Stolze Openair Logo';
 				?>
 				<a href="<?php echo esc_url( get_permalink( $artist->ID ) ); ?>" class="time-table-item" x-data="timetableItem">
 					<span class="time-table-item__name"><?php echo esc_html( $artist->post_title ); ?></span>
 					<span class="time-table-item__stage"><?php echo esc_html( $buhne ); ?></span>
 					<span class="time-table-item__playtime"><?php echo esc_html( stolze_day_and_time( $slot ) ); ?></span>
 					<div class="time-table-item__image-container" :style="`left: ${left}px`">
-						<img class="time-table-item__image" src="<?php echo esc_url( $img ); ?>" alt="<?php echo esc_attr( $artist->post_title ); ?>" />
+						<img class="time-table-item__image" src="<?php echo esc_url( $img ); ?>" alt="<?php echo esc_attr( $img_alt ); ?>" />
 					</div>
 				</a>
 			<?php endforeach; ?>
@@ -89,10 +92,10 @@ $fallback_logo = STOLZE_URI . '/assets/stolze_2024_logo.png';
 	<section class="video-section" x-data="videoSection">
 		<?php stolze_section_title( 'Festival Vibes', $logo_url, true ); ?>
 		<div class="video-section__content">
-			<div class="video-section__placeholder" x-show="!showVideo" @click="load">
-				<img class="video-section__thumbnail" src="https://img.youtube.com/vi/nwVeRbBd_hQ/maxresdefault.jpg" alt="Video thumbnail" />
-				<div class="video-section__play-button">&#9654;</div>
-			</div>
+			<button class="video-section__placeholder" type="button" x-show="!showVideo" @click="load" aria-label="Festival Vibes Video abspielen">
+				<img class="video-section__thumbnail" src="https://img.youtube.com/vi/nwVeRbBd_hQ/maxresdefault.jpg" alt="" />
+				<span class="video-section__play-button" aria-hidden="true">&#9654;</span>
+			</button>
 			<template x-if="showVideo">
 				<iframe class="video-section__video"
 					src="https://www.youtube.com/embed/nwVeRbBd_hQ?si=tR_mo5n5mjoWcNaL&autoplay=1"
@@ -115,84 +118,34 @@ $fallback_logo = STOLZE_URI . '/assets/stolze_2024_logo.png';
 	<?php /* Sponsors */ ?>
 	<?php if ( ! empty( $sponsors ) ) : ?>
 		<?php stolze_section_title( 'Sponsoren', $logo_url ); ?>
-		<div class="sponsors-grid">
-			<div class="grid">
-				<div class="grid__inner">
-					<?php foreach ( array_chunk( $sponsors, 4 ) as $row ) : ?>
-						<div class="grid-row">
-							<?php
-							foreach ( $row as $sponsor ) :
-								$url   = get_field( 'website_url', $sponsor->ID );
-								$thumb = get_the_post_thumbnail_url( $sponsor->ID, 'large' );
-								?>
-								<a class="grid-item" <?php echo $url ? 'href="' . esc_url( $url ) . '" target="_blank" rel="noopener noreferrer"' : ''; ?>>
-									<div class="grid-item__inner">
-										<?php if ( $thumb ) : ?>
-											<div class="grid_item__inner">
-												<img class="sponsor-img" src="<?php echo esc_url( $thumb ); ?>" alt="<?php echo esc_attr( $sponsor->post_title ); ?>" />
-												<h3><?php echo esc_html( $sponsor->post_title ); ?></h3>
-											</div>
-										<?php else : ?>
-											<p><?php echo esc_html( $sponsor->post_title ); ?></p>
-										<?php endif; ?>
-									</div>
-								</a>
-							<?php endforeach; ?>
-						</div>
-					<?php endforeach; ?>
-				</div>
-				<a href="https://new.stolze-openair.ch/wp-content/uploads/2026/05/2026_Sponsoringbroschuere_Stolze_Openair.pdf" target="_blank" rel="noopener noreferrer" download>
-					<span class="button"><span class="button__inner">Sponsoringbroschüre</span></span>
-				</a>
-			</div>
-		</div>
+		<?php stolze_partner_grid( $sponsors, 'sponsors-grid' ); ?>
+		<p class="section-action">
+			<a href="<?php echo esc_url( content_url( 'uploads/2026/05/2026_Sponsoringbroschuere_Stolze_Openair.pdf' ) ); ?>" target="_blank" rel="noopener noreferrer" download>
+				<span class="button"><span class="button__inner">Sponsoringbroschüre</span></span>
+			</a>
+		</p>
 	<?php endif; ?>
 
 	<?php /* Food */ ?>
 	<?php if ( ! empty( $foodtrucks ) ) : ?>
 		<?php stolze_section_title( 'Food', $logo_url ); ?>
-		<div class="foodtrucks-grid">
-			<div class="grid">
-				<div class="grid__inner">
-					<?php foreach ( array_chunk( $foodtrucks, 4 ) as $row ) : ?>
-						<div class="grid-row">
-							<?php
-							foreach ( $row as $ft ) :
-								$url   = get_field( 'website_url', $ft->ID );
-								$thumb = get_the_post_thumbnail_url( $ft->ID, 'large' );
-								?>
-								<a class="grid-item" <?php echo $url ? 'href="' . esc_url( $url ) . '" target="_blank" rel="noopener noreferrer"' : ''; ?>>
-									<div class="grid-item__inner">
-										<?php if ( $thumb ) : ?>
-											<div class="grid_item__inner">
-												<img class="sponsor-img" src="<?php echo esc_url( $thumb ); ?>" alt="<?php echo esc_attr( $ft->post_title ); ?>" />
-												<h3><?php echo esc_html( $ft->post_title ); ?></h3>
-											</div>
-										<?php else : ?>
-											<p><?php echo esc_html( $ft->post_title ); ?></p>
-										<?php endif; ?>
-									</div>
-								</a>
-							<?php endforeach; ?>
-						</div>
-					<?php endforeach; ?>
-				</div>
-			</div>
-		</div>
+		<?php stolze_partner_grid( $foodtrucks, 'foodtrucks-grid' ); ?>
 	<?php endif; ?>
 
 	<?php /* Gallery */ ?>
 	<?php
-	$gallery_urls = array();
+			$gallery_urls = array();
+			$gallery_alts = array();
 	if ( ! empty( $gallery ) && is_array( $gallery ) ) {
-		foreach ( $gallery as $g ) {
+		foreach ( $gallery as $i => $g ) {
 			$gallery_urls[] = stolze_image_url( $g, 'large' );
+			$gallery_alts[] = stolze_image_alt( $g, 'Stolze Openair ' . $jahr->post_title . ', Foto ' . ( $i + 1 ) );
 		}
 	}
 	if ( ! empty( $gallery_urls ) ) :
 		?>
 		<?php stolze_section_title( 'Fotos', $logo_url ); ?>
-		<div class="gallery" x-data="galleryLightbox" data-images='<?php echo esc_attr( wp_json_encode( $gallery_urls ) ); ?>' @keydown.window="onKey">
+		<div class="gallery" x-data="galleryLightbox" data-images='<?php echo esc_attr( wp_json_encode( $gallery_urls ) ); ?>' data-alts='<?php echo esc_attr( wp_json_encode( $gallery_alts ) ); ?>' @keydown.window="onKey">
 			<?php
 			// Combine image cells + an optional credits cell, then chunk into rows.
 			$cells = array();
@@ -207,18 +160,20 @@ $fallback_logo = STOLZE_URI . '/assets/stolze_2024_logo.png';
 				$cells[] = array( 'type' => 'credits' );
 			}
 			?>
-			<div class="grid">
-				<div class="grid__inner">
-					<?php foreach ( array_chunk( $cells, 4 ) as $row ) : ?>
-						<div class="grid-row">
-							<?php foreach ( $row as $cell ) : ?>
-								<?php if ( 'img' === $cell['type'] ) : ?>
-									<div class="grid-item">
-										<div class="grid-item__inner">
-											<img class="gallery-img" src="<?php echo esc_url( $cell['url'] ); ?>" alt="Gallery Image" @click="show(<?php echo (int) $cell['i']; ?>)" />
+				<div class="grid">
+					<div class="grid__inner">
+						<?php foreach ( array_chunk( $cells, 4 ) as $row ) : ?>
+							<div class="grid-row">
+								<?php foreach ( $row as $cell ) : ?>
+									<?php if ( 'img' === $cell['type'] ) : ?>
+										<div class="grid-item">
+											<div class="grid-item__inner">
+												<button class="gallery-button" type="button" @click="show(<?php echo (int) $cell['i']; ?>)" aria-label="<?php echo esc_attr( 'Foto ' . ( (int) $cell['i'] + 1 ) . ' öffnen' ); ?>">
+													<img class="gallery-img" src="<?php echo esc_url( $cell['url'] ); ?>" alt="" />
+												</button>
+											</div>
 										</div>
-									</div>
-								<?php else : ?>
+									<?php else : ?>
 									<div class="grid-item-credits">
 										<div class="grid-item__inner">
 											<div class="photographer-credits">
@@ -245,13 +200,13 @@ $fallback_logo = STOLZE_URI . '/assets/stolze_2024_logo.png';
 			</div>
 
 			<template x-if="open">
-				<div class="gallery-lightbox" @click="close">
+				<div class="gallery-lightbox" @click="close" role="dialog" aria-modal="true" aria-label="Fotogalerie">
 					<div class="lightbox-content" @click.stop>
-						<button class="lightbox-close" @click="close">&times;</button>
+						<button class="lightbox-close" type="button" @click="close" aria-label="Galerie schliessen">&times;</button>
 						<div class="lightbox-image-wrapper">
-							<div class="lightbox-prev" @click="prev"></div>
-							<img class="lightbox-image" :src="current" alt="Lightbox Image" />
-							<div class="lightbox-next" @click="next"></div>
+							<button class="lightbox-prev" type="button" @click="prev" aria-label="Vorheriges Foto"></button>
+							<img class="lightbox-image" :src="current" :alt="currentAlt" />
+							<button class="lightbox-next" type="button" @click="next" aria-label="Nächstes Foto"></button>
 						</div>
 					</div>
 				</div>

@@ -2,9 +2,9 @@
 /**
  * /year/{YYYY} routing.
  *
- * The Next.js frontend addressed years by their 4-digit title (e.g. /year/2024)
- * even though the jahr slugs are y2024, 2026-2, etc. We reproduce that URL with
- * a rewrite rule that resolves the title at template time — no DB changes.
+ * Public year URLs address years by their 4-digit title (e.g. /year/2024),
+ * even though the jahr slugs are y2024, 2026-2, etc. A rewrite rule resolves
+ * the title at template time.
  *
  * @package stolze
  */
@@ -55,10 +55,19 @@ function stolze_year_template( $template ) {
 	}
 
 	global $wp_query;
-	$GLOBALS['post']        = $post;
+	$GLOBALS['post']             = $post;
 	$wp_query->queried_object    = $post;
 	$wp_query->queried_object_id = $post->ID;
 	$wp_query->is_404            = false;
+
+	// Declare this as a singular post so plugins (RankMath, breadcrumbs, etc.)
+	// generate per-year titles, descriptions, and schema — not the homepage fallback.
+	// header.php already handles is_front_page() returning false via the stolze_year_qv check.
+	$wp_query->is_singular   = true;
+	$wp_query->is_single     = true;
+	$wp_query->is_home       = false;
+	$wp_query->is_front_page = false;
+
 	setup_postdata( $post );
 
 	$single = locate_template( 'single-jahr.php' );

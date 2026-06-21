@@ -1,9 +1,8 @@
 # STOLZE OPENAIR — WP Theme
 
-Native WordPress theme for the Stolze Openair festival (Zürich). Ported from the
-headless Next.js frontend (`github.com/u-till/stolze-openair-website`) to render
-the **existing** content model directly — visual + content parity with the
-former GraphQL-driven site.
+Native WordPress theme for the Stolze Openair festival (Zürich). It renders the
+festival content model directly in WordPress with classic PHP templates, ACF Pro,
+Tailwind CSS, Alpine.js and WooCommerce.
 
 ## Environment
 
@@ -14,13 +13,12 @@ former GraphQL-driven site.
 - **OOM**: the default 128M limit is exhausted by the active plugins. Always run:
   `php -d memory_limit=-1 /opt/homebrew/Cellar/wp-cli/2.12.0/bin/wp <cmd>`
   (add `-d display_errors=0 -d error_reporting=0` to silence deprecation noise).
-- **Next.js source**: cloned to `/tmp/stolze-src` during the port (design reference).
 
 ## Stack
 
 | Layer  | Package                                             | Version             |
 | ------ | --------------------------------------------------- | ------------------- |
-| CSS    | Tailwind CSS (preflight OFF) + ported SCSS          | 3.4.19 / sass 1.101 |
+| CSS    | Tailwind CSS (preflight OFF) + migrated components  | 3.4.19              |
 | JS     | Alpine.js                                           | 3.15                |
 | Build  | Vite                                                | 6.4                 |
 | CMS    | WordPress                                           | 7.0                 |
@@ -35,17 +33,15 @@ npm run build  # one-shot production build
 ```
 
 Assets ship from `dist/` via `dist/.vite/manifest.json` (read in `functions.php`).
-The JS bundle imports `src/css/tailwind.css` + `src/scss/app.scss`. JS is served
-as `type="module"` (via the `script_loader_tag` filter).
+The JS bundle imports `src/css/tailwind.css`. JS is served as `type="module"`
+(via the `script_loader_tag` filter).
 
-**Styling approach**: the Next.js design system (`src/styles/*`) is ported into
-`src/scss/tokens/` (colors, sizes, typography, breakpoints, normalize, utils) and
-`src/scss/app.scss` (component styles). The three near-identical grids
-(gallery / sponsors / foodtrucks) are scoped by an ancestor wrapper since the CSS
-module class names (`.grid`, `.grid-item`, …) become global. Tailwind preflight
-is disabled so it doesn't fight the ported normalize/design.
+**Styling approach**: `src/css/tailwind.css` is the single styling entry. It
+contains Tailwind directives, the migrated festival normalize/tokens, and the
+component styles. Tailwind preflight is disabled so it does not fight the
+festival normalize.
 
-## Content model (existing — no DB changes)
+## Content model
 
 CPTs: `jahr` (23 years), `artist` (127), `sponsor` (42), `foodtruck` (19).
 ACF groups:
@@ -54,16 +50,15 @@ ACF groups:
   IDs), `gallery`; + `social_media_links` repeater (`link_icon`/`link_label`/`url`).
 - **Sponsor**: `jahr`, `website_url`.
 - **Foodtruck**: `jahr`, `website_url`, `vegetarisches_angebot`, `veganes_angebot`
-  (veg flags are not displayed — the frontend never showed them).
+  (veg flags are available but currently not displayed).
 - **Year**: `poster` (mobile), `poster_desktop`, `logo`, `daten` (repeater of `datum`),
   `background_color`, `primary_color` (+ unused secondary/text/font), `side_events_info`,
   `visual_artist_name/url`, `photographer_credits` (repeater), `gallery`.
 
 Per-year theming: only `background_color` (wrapper bg) and `primary_color`
-(→ `--color--primary` + `--primary-hover-color`) are applied — matching the
-Next.js `YearContent`, which fetched but never used text/secondary colors.
+(→ `--color--primary` + `--primary-hover-color`) are applied.
 
-## Template map (Next.js route → WP)
+## Template map
 
 | Route            | Template             | Notes                                                                                                      |
 | ---------------- | -------------------- | ---------------------------------------------------------------------------------------------------------- |
@@ -77,7 +72,7 @@ Next.js `YearContent`, which fetched but never used text/secondary colors.
 `header.php` = fixed nav (year selector left, `menu-top` section anchors on
 home/year only, `menu-bottom` page links right) + Alpine mobile burger.
 `footer.php` only closes `wp_footer()` — the rich festival footer lives inside
-`year-content.php` (as in the Next layout).
+`year-content.php`.
 
 ## Alpine components (`src/js/app.js`)
 
@@ -88,18 +83,16 @@ home/year only, `menu-bottom` page links right) + Alpine mobile burger.
 ## PHP conventions
 
 Text domain `stolze`; helpers prefixed `stolze_`. Key files: `inc/helpers.php`
-(German UTC date formatting mirroring `formatDate.tsx`, section-title renderer,
-year theming), `inc/data.php` (queries mirroring the GraphQL), `inc/rewrites.php`
+(German UTC date formatting, section-title renderer, year theming),
+`inc/data.php` (festival content queries), `inc/rewrites.php`
 (`/year/{YYYY}`).
 
-## Deliberate deviations from the live Next.js site
+## Implementation notes
 
-- **Grid layout** uses one responsive CSS grid (per-item borders) instead of the
-  Next.js JS window-size row-chunking — same bordered-grid look, no client JS.
+- **Grid layout** uses one responsive CSS grid with per-item borders.
 - **Internal links localised**: the "Unterstütze uns" and Newsletter buttons point
-  to local `/helferanmeldung/` and `/newsletter/` (which exist here) rather than the
-  `new.stolze-openair.ch` URLs the old frontend hard-coded. The Sponsoringbroschüre
-  PDF stays external (only hosted there).
+  to local `/helferanmeldung/` and `/newsletter/`. The Sponsoringbroschüre PDF is
+  expected in the local WordPress uploads directory.
 
 ## WooCommerce (shop)
 
@@ -130,20 +123,6 @@ Permalinks: product base `produkt`, category base `produkt-kategorie`.
 - The helferformular (`[eventadmin]` volunteer plugin) **works** and renders
   natively.
 
-## Todo (another day)
+## Todo
 
-### WooCommerce (do before the lineup import)
-
-- **Style cart / checkout / my-account** to match the festival look (currently
-  WooCommerce defaults).
-- **Shop archive polish**: product category filter / sorting, pagination styling
-  once there are more products, and an empty/coming-soon state.
-- **Cart UX**: AJAX add-to-cart + "added" confirmation, and review the
-  add-to-cart → cart → checkout flow end-to-end.
-- Decide on payments/shipping config before going live (store currency is CHF;
-  shop page + permalinks are already wired).
-
-### Content
-
-- **Import old lineups from openairguide.net** — backfill historical artist /
-  year data for the older `jahr` entries from openairguide.net.
+See `GO-LIVE-TODO.md` for the current launch checklist.

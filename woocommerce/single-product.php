@@ -17,14 +17,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-do_action( 'woocommerce_before_main_content' );
-
 while ( have_posts() ) :
 	the_post();
 	$GLOBALS['product'] = wc_get_product( get_the_ID() );
 	$product            = $GLOBALS['product'];
 	if ( ! $product ) {
 		continue;
+	}
+	if ( function_exists( 'WC' ) && WC()->structured_data ) {
+		WC()->structured_data->generate_product_data( $product );
 	}
 
 	// Build the gallery: main image first, then the gallery images.
@@ -42,10 +43,12 @@ while ( have_posts() ) :
 			$gallery[] = array(
 				'full'  => $full,
 				'thumb' => $thumb ? $thumb : $full,
+				'alt'   => stolze_image_alt( $img_id, $product->get_name() ),
 			);
 		}
 	}
 	$first = ! empty( $gallery ) ? $gallery[0]['full'] : wc_placeholder_img_src( 'large' );
+	$first_alt = ! empty( $gallery ) ? $gallery[0]['alt'] : $product->get_name();
 	?>
 	<div class="single-product">
 		<div class="back-to-shop">
@@ -57,18 +60,20 @@ while ( have_posts() ) :
 		</div>
 
 		<div class="product-top">
-			<div class="product-gallery" x-data="{ current: '<?php echo esc_url( $first ); ?>' }">
+			<div class="product-gallery" x-data="{ current: <?php echo esc_attr( wp_json_encode( $first ) ); ?>, currentAlt: <?php echo esc_attr( wp_json_encode( $first_alt ) ); ?> }">
 				<div class="product-gallery__main">
-					<img :src="current" src="<?php echo esc_url( $first ); ?>" alt="<?php echo esc_attr( $product->get_name() ); ?>" />
+					<img :src="current" :alt="currentAlt" src="<?php echo esc_url( $first ); ?>" alt="<?php echo esc_attr( $first_alt ); ?>" />
 				</div>
 				<?php if ( count( $gallery ) > 1 ) : ?>
 					<div class="product-gallery__thumbs">
 						<?php foreach ( $gallery as $g ) : ?>
-							<img class="product-gallery__thumb"
-								src="<?php echo esc_url( $g['thumb'] ); ?>"
-								alt=""
-								@click="current='<?php echo esc_url( $g['full'] ); ?>'"
-								:class="current==='<?php echo esc_url( $g['full'] ); ?>' ? 'is-active' : ''" />
+							<button class="product-gallery__thumb"
+								type="button"
+								@click="current = <?php echo esc_attr( wp_json_encode( $g['full'] ) ); ?>; currentAlt = <?php echo esc_attr( wp_json_encode( $g['alt'] ) ); ?>"
+								:class="current === <?php echo esc_attr( wp_json_encode( $g['full'] ) ); ?> ? 'is-active' : ''"
+								aria-label="<?php echo esc_attr( $product->get_name() . ' Bild anzeigen' ); ?>">
+								<img src="<?php echo esc_url( $g['thumb'] ); ?>" alt="" />
+							</button>
 						<?php endforeach; ?>
 					</div>
 				<?php endif; ?>
@@ -118,24 +123,13 @@ while ( have_posts() ) :
 				<div class="shop-grid">
 					<div class="grid">
 						<div class="grid__inner">
-							<div class="grid-row">
-								<?php
-								foreach ( $stolze_related as $stolze_rp ) :
-									$stolze_rimg = $stolze_rp->get_image_id() ? wp_get_attachment_image_url( $stolze_rp->get_image_id(), 'large' ) : wc_placeholder_img_src( 'large' );
+								<div class="grid-row">
+									<?php
+									foreach ( $stolze_related as $stolze_rp ) {
+										stolze_product_card( $stolze_rp );
+									}
 									?>
-									<a class="grid-item" href="<?php echo esc_url( get_permalink( $stolze_rp->get_id() ) ); ?>">
-										<div class="grid-item__inner">
-											<div class="product-card">
-												<img class="product-card__img" src="<?php echo esc_url( $stolze_rimg ); ?>" alt="<?php echo esc_attr( $stolze_rp->get_name() ); ?>" />
-												<div class="product-card__meta">
-													<span class="product-card__name"><?php echo esc_html( $stolze_rp->get_name() ); ?></span>
-													<span class="product-card__price"><?php echo wp_kses_post( $stolze_rp->get_price_html() ); ?></span>
-												</div>
-											</div>
-										</div>
-									</a>
-								<?php endforeach; ?>
-							</div>
+								</div>
 						</div>
 					</div>
 				</div>

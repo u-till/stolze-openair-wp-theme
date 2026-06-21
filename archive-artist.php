@@ -19,7 +19,13 @@ $total   = count( $artists );
 	<div class="artists-archive__wrapper">
 		<div class="list-header">
 			<h1>All <span x-text="count"><?php echo (int) $total; ?></span> Artists</h1>
-			<input type="text" placeholder="Search artists..." x-model="query" />
+			<label class="visually-hidden" for="artist-search">Artists durchsuchen</label>
+			<input id="artist-search" type="search" placeholder="Search artists..." x-model="query" />
+		</div>
+		<div class="empty-state" x-cloak x-show="count === 0" aria-live="polite">
+			<h2>Keine Artists gefunden</h2>
+			<p>Versuche einen anderen Suchbegriff.</p>
+			<button type="button" class="empty-state__action" @click="query = ''">Suche zurücksetzen</button>
 		</div>
 		<div class="time-table">
 			<?php
@@ -38,6 +44,13 @@ $total   = count( $artists );
 				</a>
 			<?php endforeach; ?>
 		</div>
+		<?php if ( 0 === $total ) : ?>
+			<div class="empty-state">
+				<h2>Noch keine Artists veröffentlicht</h2>
+				<p>Das Line-up wird hier ergänzt, sobald es bereit ist.</p>
+				<a class="empty-state__action" href="<?php echo esc_url( home_url( '/' ) ); ?>">Zur Startseite</a>
+			</div>
+		<?php endif; ?>
 	</div>
 </div>
 <?php

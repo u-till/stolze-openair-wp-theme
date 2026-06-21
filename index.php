@@ -24,7 +24,13 @@ get_header();
 			<?php
 		endwhile;
 	else :
-		echo '<p>Nichts gefunden.</p>';
+		?>
+		<div class="empty-state empty-state--large">
+			<h1>Nichts gefunden</h1>
+			<p>Für diese Ansicht sind noch keine Inhalte veröffentlicht.</p>
+			<a class="empty-state__action" href="<?php echo esc_url( home_url( '/' ) ); ?>">Zur Startseite</a>
+		</div>
+		<?php
 	endif;
 	?>
 </main>

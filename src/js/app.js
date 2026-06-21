@@ -1,6 +1,5 @@
 import Alpine from 'alpinejs';
 import '../css/tailwind.css';
-import '../scss/app.scss';
 
 /**
  * Mobile navigation drawer (burger toggle).
@@ -17,7 +16,7 @@ Alpine.data('stolzeNav', () => ({
 
 /**
  * Time-table item: reveal the artist image at a random horizontal offset on
- * hover (mirrors the Next.js random-position effect). The CSS shows the image
+ * hover. The CSS shows the image
  * container on :hover at >=1024px; we only set its left offset here.
  */
 Alpine.data('timetableItem', () => ({
@@ -61,13 +60,16 @@ Alpine.data('artistSearch', (total) => ({
  */
 Alpine.data('galleryLightbox', () => ({
     images: [],
+    alts: [],
     index: 0,
     open: false,
     init() {
         try {
             this.images = JSON.parse(this.$root.dataset.images || '[]');
+            this.alts = JSON.parse(this.$root.dataset.alts || '[]');
         } catch (e) {
             this.images = [];
+            this.alts = [];
         }
     },
     show(i) {
@@ -91,6 +93,9 @@ Alpine.data('galleryLightbox', () => ({
     },
     get current() {
         return this.images[this.index] || '';
+    },
+    get currentAlt() {
+        return this.alts[this.index] || '';
     },
 }));
 

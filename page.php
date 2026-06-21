@@ -1,6 +1,6 @@
 <?php
 /**
- * Plain CMS page — title + block content (mirrors src/app/[...slug]/page.tsx).
+ * Plain CMS page: title + block content.
  * Shortcodes (e.g. [eventadmin] on Helferanmeldung) render natively here.
  *
  * @package stolze

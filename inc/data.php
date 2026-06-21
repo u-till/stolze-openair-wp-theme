@@ -1,6 +1,6 @@
 <?php
 /**
- * Data access — mirrors the GraphQL queries the Next.js frontend used.
+ * Data access helpers for festival content.
  *
  * @package stolze
  */
@@ -10,14 +10,51 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Namespace a cache key with the current content-cache version.
+ *
+ * @param string $key Base cache key.
+ * @return string
+ */
+function stolze_data_cache_key( $key ) {
+	$version = max( 1, (int) get_option( 'stolze_data_cache_version', 1 ) );
+	return 'v' . $version . '_' . sanitize_key( $key );
+}
+
+/**
+ * Invalidate festival query caches after relevant content changes.
+ *
+ * @param int|string $post_id Post ID supplied by WordPress or ACF.
+ */
+function stolze_invalidate_data_cache( $post_id ) {
+	$post_id = is_numeric( $post_id ) ? (int) $post_id : 0;
+	if ( $post_id && ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) ) {
+		return;
+	}
+
+	$post_type = $post_id ? get_post_type( $post_id ) : '';
+	if ( $post_type && ! in_array( $post_type, array( 'jahr', 'artist', 'sponsor', 'foodtruck' ), true ) ) {
+		return;
+	}
+
+	$version = max( 1, (int) get_option( 'stolze_data_cache_version', 1 ) );
+	update_option( 'stolze_data_cache_version', $version + 1, false );
+}
+add_action( 'acf/save_post', 'stolze_invalidate_data_cache', 20 );
+add_action( 'save_post', 'stolze_invalidate_data_cache', 20 );
+add_action( 'before_delete_post', 'stolze_invalidate_data_cache' );
+add_action( 'trashed_post', 'stolze_invalidate_data_cache' );
+add_action( 'untrashed_post', 'stolze_invalidate_data_cache' );
+
+/**
  * The "latest" year — most recently created jahr post.
  *
- * Matches GraphQL `jahre(first: 1)` whose default order is post_date DESC.
+ * Returns the latest festival year by publish date.
  *
  * @return WP_Post|null
  */
 function stolze_latest_year() {
-	$cached = wp_cache_get( 'latest_year', 'stolze' );
+	$cache_key = stolze_data_cache_key( 'latest_year' );
+	$cached    = wp_cache_get( $cache_key, 'stolze' );
 	if ( false !== $cached ) {
 		return $cached;
 	}
@@ -32,7 +69,7 @@ function stolze_latest_year() {
 		)
 	);
 	$year = $q->have_posts() ? $q->posts[0] : null;
-	wp_cache_set( 'latest_year', $year, 'stolze' );
+	wp_cache_set( $cache_key, $year, 'stolze' );
 	return $year;
 }
 
@@ -48,7 +85,7 @@ function stolze_year_by_title( $year ) {
 		return null;
 	}
 
-	$cache_key = 'year_by_title_' . $year;
+	$cache_key = stolze_data_cache_key( 'year_by_title_' . $year );
 	$cached    = wp_cache_get( $cache_key, 'stolze' );
 	if ( false !== $cached ) {
 		return $cached;
@@ -73,7 +110,8 @@ function stolze_year_by_title( $year ) {
  * @return WP_Post[]
  */
 function stolze_all_years() {
-	$cached = wp_cache_get( 'all_years', 'stolze' );
+	$cache_key = stolze_data_cache_key( 'all_years' );
+	$cached    = wp_cache_get( $cache_key, 'stolze' );
 	if ( false !== $cached ) {
 		return $cached;
 	}
@@ -92,7 +130,7 @@ function stolze_all_years() {
 			return (int) $b->post_title <=> (int) $a->post_title;
 		}
 	);
-	wp_cache_set( 'all_years', $years, 'stolze' );
+	wp_cache_set( $cache_key, $years, 'stolze' );
 	return $years;
 }
 
@@ -100,8 +138,7 @@ function stolze_all_years() {
  * Posts of a CPT linked to a given year via the ACF `jahr` relationship.
  *
  * The relationship is stored as a serialized array of post IDs, so we match
- * the quoted id with a LIKE meta query (same selectivity as WPGraphQL's
- * `where: { jahrId }`).
+ * the quoted id with a LIKE meta query.
  *
  * @param string $post_type Post type (artist|sponsor|foodtruck).
  * @param int    $year_id   jahr post ID.
@@ -115,7 +152,7 @@ function stolze_by_year( $post_type, $year_id, $orderby = 'date' ) {
 	}
 
 	$year_id   = (int) $year_id;
-	$cache_key = 'by_year_' . $post_type . '_' . $year_id . '_' . sanitize_key( $orderby );
+	$cache_key = stolze_data_cache_key( 'by_year_' . $post_type . '_' . $year_id . '_' . sanitize_key( $orderby ) );
 	$cached    = wp_cache_get( $cache_key, 'stolze' );
 	if ( false !== $cached ) {
 		return $cached;
@@ -164,7 +201,8 @@ function stolze_artists_for_year( $year_id ) {
  * @return WP_Post[]
  */
 function stolze_all_artists() {
-	$cached = wp_cache_get( 'all_artists', 'stolze' );
+	$cache_key = stolze_data_cache_key( 'all_artists' );
+	$cached    = wp_cache_get( $cache_key, 'stolze' );
 	if ( false !== $cached ) {
 		return $cached;
 	}
@@ -179,7 +217,7 @@ function stolze_all_artists() {
 			'no_found_rows'  => true,
 		)
 	);
-	wp_cache_set( 'all_artists', $q->posts, 'stolze' );
+	wp_cache_set( $cache_key, $q->posts, 'stolze' );
 	return $q->posts;
 }
 
@@ -244,5 +282,5 @@ function stolze_year_href( $year, $latest_title ) {
 	if ( (string) $year->post_title === (string) $latest_title ) {
 		return home_url( '/' );
 	}
-	return home_url( '/year/' . $year->post_title );
+	return home_url( '/year/' . rawurlencode( $year->post_title ) );
 }

@@ -3,11 +3,10 @@
 A native WordPress theme for the **Stolze Openair** festival (Zürich) — the
 largest free open-air in the city, held each June on the Stolzewiese (Kreis 6).
 
-It was ported from a headless Next.js frontend to render the festival's existing
-content model directly in WordPress (no GraphQL layer), with visual + content
-parity. The whole site is organised around festival **years**: the homepage
-shows the latest edition, and every past year has its own page with lineup,
-sponsors, food, side-events and a photo gallery.
+It renders the festival's existing content model directly in WordPress. The
+whole site is organised around festival **years**: the homepage shows the latest
+edition, and every past year has its own page with lineup, sponsors, food,
+side-events and a photo gallery.
 
 ## Stack
 
@@ -15,7 +14,7 @@ sponsors, food, side-events and a photo gallery.
 |---|---|
 | Templating | WordPress (classic PHP templates) |
 | Fields | Advanced Custom Fields (ACF) Pro |
-| Styling | SCSS design system + Tailwind CSS 3 (utilities; preflight off) |
+| Styling | Tailwind CSS 3 + migrated component CSS (preflight off) |
 | Interactivity | Alpine.js 3 |
 | Build | Vite 6 |
 | Shop | WooCommerce |
@@ -55,13 +54,13 @@ functions.php            theme setup, asset enqueue (Vite manifest), WC support
 inc/                     helpers, data queries, /year/{YYYY} rewrite
 template-parts/          year-content (the home/year page composition)
 woocommerce/             custom shop + single-product templates
-src/scss/                ported design system (tokens + components)
+src/css/tailwind.css     Tailwind entry + migrated festival component CSS
 src/js/app.js            Alpine components + WooCommerce variation pills
 assets/                  favicon, fallback logo, Gutenberg block CSS
 ```
 
-See `CLAUDE.md` for the detailed content-model map, conventions, and the
-remaining to-do list.
+See `CLAUDE.md` for the detailed content-model map and conventions. See
+`GO-LIVE-TODO.md` for the launch checklist.
 
 ## Credits
 

@@ -1,0 +1,21 @@
+{
+  "_source": "http://web.archive.org/web/20161009041905/http://www.stolze-openair.ch/",
+  "_note": "Stolze Openair 2016 line-up (Fri 3 + Sat 4 June 2016), recovered from the festival's own archived site because openairguide.net has no 2016 lineup.",
+  "2016": [
+    { "name": "LiA", "date": "2016-06-03", "time": "17:45", "stage": "Hauptbühne", "origin": "Schweiz", "tagline": "Folkige Chansons aus der Romandie", "source_slug": "lia-ch" },
+    { "name": "Tigershead", "date": "2016-06-03", "time": "18:45", "stage": "Hut-Bühne", "origin": "Schweiz", "tagline": "Revolutionized Disco dank Biotechno", "source_slug": "tigershead-ch" },
+    { "name": "Nadja Zela", "date": "2016-06-03", "time": "19:45", "stage": "Hauptbühne", "origin": "Schweiz", "tagline": "Bluesrockige Wärme braucht die Wiese", "source_slug": "nadja-zela-ch" },
+    { "name": "Sykur", "date": "2016-06-03", "time": "21:45", "stage": "Hauptbühne", "origin": "Island", "tagline": "Super-bouncy Icelandic Dance Stars", "source_slug": "sykur-isl" },
+    { "name": "DJ Chiri Moya", "date": "2016-06-03", "time": "23:00", "stage": "Hut-Bühne", "origin": "", "tagline": "", "source_slug": "dj-chiri-moya" },
+    { "name": "Musikschule Konservatorium Zürich", "date": "2016-06-04", "time": "14:15", "stage": "Hauptbühne", "origin": "Schweiz", "tagline": "Nachwuchsbands auf der grossen Bühne", "source_slug": "musikschule-konservatorium-zurich" },
+    { "name": "Gina Été", "date": "2016-06-04", "time": "15:45", "stage": "Hut-Bühne", "origin": "Schweiz", "tagline": "Multiinstrumental und multilingual", "source_slug": "gina-ete-ch" },
+    { "name": "Rio Wolta", "date": "2016-06-04", "time": "16:45", "stage": "Hauptbühne", "origin": "Schweiz", "tagline": "Die Indie-Engelsstimme des Volkes", "source_slug": "335" },
+    { "name": "Vendredi Soir Swing", "date": "2016-06-04", "time": "17:45", "stage": "Hut-Bühne", "origin": "Schweiz", "tagline": "Gypsy-Swing und alles drumherum", "source_slug": "vendredi-soir-swing-ch" },
+    { "name": "The Weyers", "date": "2016-06-04", "time": "18:45", "stage": "Hauptbühne", "origin": "Schweiz", "tagline": "Ungehobelter High-Energy-Rock", "source_slug": "327" },
+    { "name": "Cygne", "date": "2016-06-04", "time": "19:45", "stage": "Hut-Bühne", "origin": "USA", "tagline": "Travellers sound", "source_slug": "318" },
+    { "name": "Wrongkong", "date": "2016-06-04", "time": "20:45", "stage": "Hauptbühne", "origin": "Deutschland", "tagline": "Verloren zwischen Club- und Rockmusik", "source_slug": "wrongkong-de" },
+    { "name": "Maloon TheBoom and Special Guest", "date": "2016-06-04", "time": "21:45", "stage": "Hut-Bühne", "origin": "Schweiz", "tagline": "Zürcher Musiker und Beat-Produzent", "source_slug": "309" },
+    { "name": "Muthoni the Drummer Queen", "date": "2016-06-04", "time": "22:45", "stage": "Hauptbühne", "origin": "Schweiz / Kenia", "tagline": "Dancefloordominante Beat-Bombe", "source_slug": "muthoni-the-drummer-queen-chken" },
+    { "name": "DJ Rock Gitano", "date": "2016-06-05", "time": "00:00", "stage": "Hut-Bühne", "origin": "Schweiz", "tagline": "Unser aller Lieblings-DJ", "source_slug": "dj-rock-gitano" }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "_source": "http://web.archive.org/web/20140616193225/http://www.stolze-openair.ch/",
+  "_band_pages": "http://web.archive.org/web/20140617195600*/http://www.stolze-openair.ch/band/*/",
+  "_note": "Stolze Openair 2014 line-up (Fri 13 + Sat 14 June 2014), recovered from the festival's own archived site because openairguide.net has no 2014 lineup. Note: Baby Jail replaced Bongo Mail as a last-minute stand-in.",
+  "2014": [
+    { "name": "mmmh!", "date": "2014-06-13", "time": "17:45", "stage": "Hauptbühne", "origin": "Schweiz (Freiburg)", "tagline": "Feinster Indie-Pop aus Freiburg mit hochkarätiger Band-Besetzung", "source_slug": "mmmh" },
+    { "name": "The Animen", "date": "2014-06-13", "time": "19:45", "stage": "Hauptbühne", "origin": "Schweiz (Genf)", "tagline": "Un peu de Retro-Rock aus den années 60 – live gar nicht verstaubt", "source_slug": "animen" },
+    { "name": "OY", "date": "2014-06-13", "time": "21:45", "stage": "Hauptbühne", "origin": "Schweiz", "tagline": "Afrikanische Klänge in elektronischer Musik", "source_slug": "oy" },
+    { "name": "Bands Musikschule Konservatorium Zürich", "date": "2014-06-14", "time": "14:15", "stage": "Hauptbühne", "origin": "Schweiz", "tagline": "Nachwuchsbands eröffnen den zweiten Festival-Tag", "source_slug": "bands-musikschule-konservatorium-zurich-mkz" },
+    { "name": "I Made You a Tape", "date": "2014-06-14", "time": "16:50", "stage": "Hauptbühne", "origin": "Schweiz", "tagline": "Silberglitzer im Nebel der Nostalgie – Nebel-Indie", "source_slug": "i-made-you-tape" },
+    { "name": "Kejnu", "date": "2014-06-14", "time": "18:50", "stage": "Hauptbühne", "origin": "Schweiz", "tagline": "Sphärische Klänge, reich an musikalischen Facetten", "source_slug": "kejnu" },
+    { "name": "Baby Jail", "date": "2014-06-14", "time": "20:50", "stage": "Hauptbühne", "origin": "Schweiz", "tagline": "Ersetzt kurzfristig Bongo Mail", "source_slug": "baby-jail" },
+    { "name": "The Pussywarmers & Réka", "date": "2014-06-14", "time": "22:50", "stage": "Hauptbühne", "origin": "Schweiz", "tagline": "Sextett: Rock'n'Roll • Trash-Variété • Garage-Gipsy • Blues • Pop", "source_slug": "pussywarmers-reka" },
+    { "name": "DJ Rock Gitano", "date": "2014-06-15", "time": "00:00", "stage": "Baumhaus-Bühne", "origin": "Schweiz", "tagline": "Gipsy Punk • Balkan Beats • Elektro Swing – ein Gefühlsbad aus Heiterkeit und Melancholie", "source_slug": "dj-rock-gitano" }
+  ]
+}

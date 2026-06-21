@@ -1,7 +1,6 @@
 <?php
 /**
- * Single artist — /artist/{slug}: a full-page overlay modal (mirrors
- * src/app/artist/[artist]/page.tsx).
+ * Single artist — /artist/{slug}: a full-page overlay modal.
  *
  * @package stolze
  */
@@ -22,14 +21,14 @@ while ( have_posts() ) :
 	$links     = is_array( $links ) ? $links : array();
 
 	$latest_year = stolze_artist_latest_year_title( $artist_id );
-	$back_link   = $latest_year ? home_url( '/year/' . $latest_year ) . '#lineup' : home_url( '/' );
+	$back_link   = $latest_year ? home_url( '/year/' . rawurlencode( $latest_year ) ) . '#lineup' : home_url( '/' );
 
 	$modal_style = $bg_url ? '--modal-background: url(' . esc_url( $bg_url ) . ')' : '';
 	?>
 	<div class="artist-overlay" style="<?php echo esc_attr( $modal_style ); ?>">
 		<div class="overlay__inner">
 			<div class="overlay__content">
-				<a href="<?php echo esc_url( $back_link ); ?>" class="back-link">Back to lineup</a>
+				<a href="<?php echo esc_url( $back_link ); ?>" class="back-link">Zurück zum Lineup</a>
 				<div class="artist-modal">
 					<div class="artist-modal__header"><?php the_title(); ?></div>
 					<div class="artist-modal__info">

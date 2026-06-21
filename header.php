@@ -32,11 +32,21 @@ if ( '' !== $stolze_year_qv ) {
 $stolze_menu_bottom = stolze_menu_items( 'menu-bottom' );
 $stolze_menu_top    = stolze_menu_items( 'menu-top' );
 
-// Pages that aren't a year view (shop, cart, Infos, artists, 404) inherit the
-// most recent year's palette via CSS-variable overrides on <body>. Year pages
-// (front page, /year/{YYYY}, single jahr) theme their own <main> instead.
+// Apply the active year palette on <body> so global chrome (fixed nav, links)
+// and nested sections read the same CSS variables.
 $stolze_is_year_page = $stolze_is_year_view || is_singular( 'jahr' );
-$stolze_body_style   = $stolze_is_year_page ? '' : stolze_global_theme_vars();
+if ( $stolze_is_year_page ) {
+	if ( '' !== $stolze_year_qv ) {
+		$stolze_theme_year = stolze_year_by_title( $stolze_year_qv );
+	} elseif ( is_singular( 'jahr' ) ) {
+		$stolze_theme_year = get_queried_object();
+	} else {
+		$stolze_theme_year = stolze_latest_year();
+	}
+	$stolze_body_style = $stolze_theme_year instanceof WP_Post ? stolze_year_theme_vars( get_fields( $stolze_theme_year->ID ) ) : '';
+} else {
+	$stolze_body_style = stolze_global_theme_vars();
+}
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -103,4 +113,3 @@ $stolze_body_style   = $stolze_is_year_page ? '' : stolze_global_theme_vars();
 		</div>
 	</header>
 </div>
-

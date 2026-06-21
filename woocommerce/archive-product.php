@@ -35,34 +35,19 @@ if ( have_posts() ) {
 	<?php stolze_section_title( woocommerce_page_title( false ) ? woocommerce_page_title( false ) : 'Shop', $shop_logo ); ?>
 
 	<?php if ( ! empty( $shop_products ) ) : ?>
-		<?php do_action( 'woocommerce_before_shop_loop' ); ?>
 		<div class="shop-grid">
 			<div class="grid">
-				<div class="grid__inner">
-					<?php foreach ( array_chunk( $shop_products, 4 ) as $row ) : ?>
-						<div class="grid-row">
-							<?php
-							foreach ( $row as $product ) :
-								if ( ! $product ) {
-									continue;
+					<div class="grid__inner">
+						<?php foreach ( array_chunk( $shop_products, 4 ) as $row ) : ?>
+							<div class="grid-row">
+								<?php
+								foreach ( $row as $product ) {
+									stolze_product_card( $product );
 								}
-								$img = $product->get_image_id() ? wp_get_attachment_image_url( $product->get_image_id(), 'large' ) : wc_placeholder_img_src( 'large' );
 								?>
-								<a class="grid-item" href="<?php echo esc_url( get_permalink( $product->get_id() ) ); ?>">
-									<div class="grid-item__inner">
-										<div class="product-card">
-											<img class="product-card__img" src="<?php echo esc_url( $img ); ?>" alt="<?php echo esc_attr( $product->get_name() ); ?>" />
-											<div class="product-card__meta">
-												<span class="product-card__name"><?php echo esc_html( $product->get_name() ); ?></span>
-												<span class="product-card__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></span>
-											</div>
-										</div>
-									</div>
-								</a>
-							<?php endforeach; ?>
-						</div>
-					<?php endforeach; ?>
-				</div>
+							</div>
+						<?php endforeach; ?>
+					</div>
 			</div>
 		</div>
 
@@ -79,7 +64,11 @@ if ( have_posts() ) {
 		<?php do_action( 'woocommerce_after_shop_loop' ); ?>
 	<?php else : ?>
 		<?php do_action( 'woocommerce_no_products_found' ); ?>
-		<p class="shop-empty">Zurzeit sind keine Produkte verfügbar.</p>
+		<div class="empty-state empty-state--large shop-empty">
+			<h2>Der Shop ist gerade leer</h2>
+			<p>Neue Festivalprodukte erscheinen hier, sobald sie verfügbar sind.</p>
+			<a class="empty-state__action" href="<?php echo esc_url( home_url( '/' ) ); ?>">Zum Festival</a>
+		</div>
 	<?php endif; ?>
 </div>
 <?php

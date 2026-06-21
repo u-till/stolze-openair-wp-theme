@@ -2,9 +2,8 @@
 /**
  * Presentation helpers (German date formatting + per-year theming).
  *
- * Mirrors src/utils/formatDate.tsx from the Next.js frontend. All dates are
- * rendered in UTC (the frontend used `timeZone: 'UTC'`) so the wall-clock value
- * stored in the slot field is shown verbatim.
+ * All dates are rendered in UTC so the wall-clock value stored in the slot
+ * field is shown verbatim.
  *
  * @package stolze
  */
@@ -44,6 +43,9 @@ function stolze_day_and_time( $value ) {
 	if ( ! $d ) {
 		return '';
 	}
+	if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', trim( (string) $value ) ) ) {
+		return STOLZE_WEEKDAYS[ (int) $d->format( 'w' ) ];
+	}
 	return STOLZE_WEEKDAYS[ (int) $d->format( 'w' ) ] . ', ' . $d->format( 'H:i' );
 }
 
@@ -76,6 +78,9 @@ function stolze_day_time_year_if_past( $value ) {
 	$is_past = $d < new DateTimeImmutable( 'now', new DateTimeZone( 'UTC' ) );
 	if ( $is_past ) {
 		$full = (int) $d->format( 'j' ) . '. ' . STOLZE_MONTHS[ (int) $d->format( 'n' ) ] . ' ' . $d->format( 'Y' );
+		if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', trim( (string) $value ) ) ) {
+			return $weekday . ', ' . $full;
+		}
 		return $weekday . ', ' . $full . ' ' . $d->format( 'H:i' );
 	}
 	return $weekday . ', ' . $d->format( 'H:i' );
@@ -127,21 +132,140 @@ function stolze_image_url( $img, $size = 'large' ) {
 }
 
 /**
+ * Resolve meaningful image alternative text from ACF or attachment metadata.
+ *
+ * @param mixed  $image    ACF image value or attachment ID.
+ * @param string $fallback Fallback text when the media item has no alt text.
+ * @return string
+ */
+function stolze_image_alt( $image, $fallback = '' ) {
+	if ( is_array( $image ) ) {
+		if ( ! empty( $image['alt'] ) ) {
+			return trim( wp_strip_all_tags( $image['alt'] ) );
+		}
+		$image = $image['ID'] ?? $image['id'] ?? 0;
+	}
+
+	if ( is_numeric( $image ) ) {
+		$alt = get_post_meta( (int) $image, '_wp_attachment_image_alt', true );
+		if ( $alt ) {
+			return trim( wp_strip_all_tags( $alt ) );
+		}
+	}
+
+	return trim( wp_strip_all_tags( $fallback ) );
+}
+
+/**
  * Sanitize a color value before using it in inline CSS.
  *
- * ACF color picker fields should return hex colors. If an editor/plugin returns
- * anything else, drop it instead of allowing arbitrary CSS into a style attr.
+ * ACF currently stores a mix of hex, rgb() and rgba() color strings.
  *
  * @param mixed $value Raw color value.
- * @return string Sanitized hex color, or empty string.
+ * @return string Sanitized CSS color, or empty string.
  */
 function stolze_sanitize_color( $value ) {
 	if ( ! is_string( $value ) ) {
 		return '';
 	}
 
-	$color = sanitize_hex_color( trim( $value ) );
-	return $color ? $color : '';
+	$value = trim( $value );
+	$hex   = sanitize_hex_color( $value );
+	if ( $hex ) {
+		return $hex;
+	}
+
+	if ( preg_match( '/^rgba?\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})(?:\s*,\s*(0|1|0?\.\d+))?\s*\)$/', $value, $matches ) ) {
+		$r = min( 255, max( 0, (int) $matches[1] ) );
+		$g = min( 255, max( 0, (int) $matches[2] ) );
+		$b = min( 255, max( 0, (int) $matches[3] ) );
+		if ( str_starts_with( strtolower( $value ), 'rgba' ) ) {
+			$a = isset( $matches[4] ) ? min( 1, max( 0, (float) $matches[4] ) ) : 1;
+			return 'rgba(' . $r . ',' . $g . ',' . $b . ',' . $a . ')';
+		}
+		return 'rgb(' . $r . ',' . $g . ',' . $b . ')';
+	}
+
+	return '';
+}
+
+/**
+ * Render a reusable sponsor/food logo grid.
+ *
+ * @param WP_Post[] $posts         Posts to render.
+ * @param string    $wrapper_class Grid wrapper class.
+ */
+function stolze_partner_grid( $posts, $wrapper_class ) {
+	if ( empty( $posts ) ) {
+		return;
+	}
+	?>
+	<div class="<?php echo esc_attr( $wrapper_class ); ?>">
+		<div class="grid">
+			<div class="grid__inner">
+				<?php foreach ( array_chunk( $posts, 4 ) as $row ) : ?>
+					<div class="grid-row">
+						<?php
+						foreach ( $row as $post ) :
+							$url   = get_field( 'website_url', $post->ID );
+							$thumb_id = get_post_thumbnail_id( $post->ID );
+							$thumb    = $thumb_id ? wp_get_attachment_image_url( $thumb_id, 'large' ) : '';
+							$alt      = stolze_image_alt( $thumb_id, $post->post_title . ' Logo' );
+							?>
+							<?php if ( $url ) : ?>
+								<a class="grid-item" href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener noreferrer">
+							<?php else : ?>
+								<div class="grid-item">
+							<?php endif; ?>
+								<div class="grid-item__inner">
+									<?php if ( $thumb ) : ?>
+										<div class="grid-item__content">
+											<img class="partner-img" src="<?php echo esc_url( $thumb ); ?>" alt="<?php echo esc_attr( $alt ); ?>" />
+											<h3><?php echo esc_html( $post->post_title ); ?></h3>
+										</div>
+									<?php else : ?>
+										<p><?php echo esc_html( $post->post_title ); ?></p>
+									<?php endif; ?>
+								</div>
+							<?php if ( $url ) : ?>
+								</a>
+							<?php else : ?>
+								</div>
+							<?php endif; ?>
+						<?php endforeach; ?>
+					</div>
+				<?php endforeach; ?>
+			</div>
+		</div>
+	</div>
+	<?php
+}
+
+/**
+ * Render one festival product card for shop grids.
+ *
+ * @param WC_Product $product Product object.
+ */
+function stolze_product_card( $product ) {
+	if ( ! $product ) {
+		return;
+	}
+
+	$img = $product->get_image_id() ? wp_get_attachment_image_url( $product->get_image_id(), 'large' ) : wc_placeholder_img_src( 'large' );
+	$alt = stolze_image_alt( $product->get_image_id(), $product->get_name() );
+	?>
+	<a class="grid-item" href="<?php echo esc_url( get_permalink( $product->get_id() ) ); ?>">
+		<div class="grid-item__inner">
+			<div class="product-card">
+				<img class="product-card__img" src="<?php echo esc_url( $img ); ?>" alt="<?php echo esc_attr( $alt ); ?>" />
+				<div class="product-card__meta">
+					<span class="product-card__name"><?php echo esc_html( $product->get_name() ); ?></span>
+					<span class="product-card__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></span>
+				</div>
+			</div>
+		</div>
+	</a>
+	<?php
 }
 
 /**
@@ -163,9 +287,9 @@ function stolze_section_title( $title, $logo_url = '', $inverse = false ) {
 		for ( $i = 0; $i < 2; $i++ ) :
 			if ( $logo_url ) :
 				?>
-				<img class="section-title__image" src="<?php echo esc_url( $logo_url ); ?>" alt="stolze logo" />
+				<img class="section-title__image" src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo 0 === $i ? 'Stolze Openair Logo' : ''; ?>"<?php echo 0 === $i ? '' : ' aria-hidden="true"'; ?> />
 			<?php else : ?>
-				<p class="section-logo_placeholder">Stolze <br /> Openair</p>
+				<p class="section-logo-placeholder">Stolze <br /> Openair</p>
 				<?php
 			endif;
 			if ( 0 === $i ) :
@@ -182,11 +306,9 @@ function stolze_section_title( $title, $logo_url = '', $inverse = false ) {
 /**
  * Build the inline style for the <main> wrapper of a year.
  *
- * The Next.js YearContent only ever applies the year `backgroundColor` (on the
- * wrapper) and `primaryColor` (passed to section titles, gradients and grid
- * hovers). It deliberately leaves text/secondary colors untouched, so we mirror
- * exactly that: background-color inline, plus --color--primary and
- * --primary-hover-color CSS vars that the ported component CSS reads.
+ * Apply the year background and primary color fields as the public theme color
+ * surface: background-color inline, plus --color--primary and
+ * --primary-hover-color CSS vars.
  *
  * @param array $f get_fields() result for the jahr post.
  * @return string Inline style attribute value (without the attribute name).
@@ -195,12 +317,21 @@ function stolze_year_theme_vars( $f ) {
 	$out = array();
 	$bg  = stolze_sanitize_color( $f['background_color'] ?? '' );
 	$pri = stolze_sanitize_color( $f['primary_color'] ?? '' );
+	$txt = stolze_sanitize_color( $f['text_color'] ?? '' );
+	$inv = stolze_sanitize_color( $f['secondary_text_color'] ?? '' );
 	if ( $bg ) {
 		$out[] = 'background-color:' . $bg;
+		$out[] = '--color--background--main:' . $bg;
 	}
 	if ( $pri ) {
 		$out[] = '--color--primary:' . $pri;
 		$out[] = '--primary-hover-color:' . $pri;
+	}
+	if ( $txt ) {
+		$out[] = '--color--text:' . $txt;
+	}
+	if ( $inv ) {
+		$out[] = '--color--text--inverse:' . $inv;
 	}
 	return implode( ';', $out );
 }
@@ -224,12 +355,20 @@ function stolze_global_theme_vars() {
 	$out = array();
 	$bg  = stolze_sanitize_color( get_field( 'background_color', $year->ID ) );
 	$pri = stolze_sanitize_color( get_field( 'primary_color', $year->ID ) );
+	$txt = stolze_sanitize_color( get_field( 'text_color', $year->ID ) );
+	$inv = stolze_sanitize_color( get_field( 'secondary_text_color', $year->ID ) );
 	if ( $bg ) {
 		$out[] = '--color--background--main:' . $bg;
 	}
 	if ( $pri ) {
 		$out[] = '--color--primary:' . $pri;
 		$out[] = '--primary-hover-color:' . $pri;
+	}
+	if ( $txt ) {
+		$out[] = '--color--text:' . $txt;
+	}
+	if ( $inv ) {
+		$out[] = '--color--text--inverse:' . $inv;
 	}
 	return implode( ';', $out );
 }

@@ -4,9 +4,8 @@ export default {
         './**/*.php',
         './src/js/**/*.js',
     ],
-    // Preflight is disabled: the ported SCSS ships its own normalize + design
-    // system, and we don't want Tailwind's reset fighting it. Utilities remain
-    // available for layout/chrome.
+    // Preflight is disabled: src/css/tailwind.css carries the festival normalize
+    // and component layer, so Tailwind's reset should not fight it.
     corePlugins: {
         preflight: false,
     },

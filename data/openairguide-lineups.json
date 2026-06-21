@@ -1,0 +1,753 @@
+{
+    "2015": [
+        {
+            "name": "Yellow Bird",
+            "date": "2015-06-05",
+            "time": "17:45",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/yellow-bird",
+            "source_id": "40819",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Raspberry Jamwood",
+            "date": "2015-06-05",
+            "time": "18:45",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/raspberry-jamwood",
+            "source_id": "40818",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Pullup Orchestra",
+            "date": "2015-06-05",
+            "time": "19:45",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/pullup-orchestra",
+            "source_id": "21661",
+            "origin": "Schweiz",
+            "genre": "Brass",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Faber",
+            "date": "2015-06-05",
+            "time": "20:45",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/faber",
+            "source_id": "37157",
+            "origin": "Schweiz",
+            "genre": "Singer-Songwriter",
+            "social_links": [
+                {
+                    "link_icon": "",
+                    "link_label": "Website",
+                    "url": "https://faber-supermarkt.com/"
+                },
+                {
+                    "link_icon": "",
+                    "link_label": "Instagram",
+                    "url": "https://www.instagram.com/faber_singt/?hl=de"
+                },
+                {
+                    "link_icon": "",
+                    "link_label": "YouTube",
+                    "url": "https://www.youtube.com/channel/UCZmMQrt1cIU6YQpypm7aclw"
+                },
+                {
+                    "link_icon": "",
+                    "link_label": "Facebook",
+                    "url": "https://www.facebook.com/fabermusik/?locale=de_DE"
+                }
+            ],
+            "image_url": "https://www.openairguide.net/img/1200/faber.jpg"
+        },
+        {
+            "name": "Pollyester",
+            "date": "2015-06-05",
+            "time": "21:45",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/pollyester",
+            "source_id": "28550",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Oscar & Lisa",
+            "date": "2015-06-06",
+            "time": "14:30",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/oscar-lisa",
+            "source_id": "40815",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Bleibkraut & Bloom",
+            "date": "2015-06-06",
+            "time": "15:30",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/bleibkraut-bloom",
+            "source_id": "40816",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Bob Spring & The Calling Sirens",
+            "date": "2015-06-06",
+            "time": "16:30",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/bob-spring-the-calling-sirens",
+            "source_id": "40814",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "NLB Electronics",
+            "date": "2015-06-06",
+            "time": "17:30",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/nlb-electronics",
+            "source_id": "40813",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Die Astronauten",
+            "date": "2015-06-06",
+            "time": "19:30",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/die-astronauten",
+            "source_id": "40817",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "John Dear",
+            "date": "2015-06-06",
+            "time": "19:30",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/john-dear",
+            "source_id": "33500",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Skip&Die",
+            "date": "2015-06-06",
+            "time": "22:50",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/skip-die",
+            "source_id": "30142",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        }
+    ],
+    "2013": [
+        {
+            "name": "Weekend Phantom",
+            "date": "2013-05-31",
+            "time": "17:45",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/weekend-phantom",
+            "source_id": "33325",
+            "origin": "Schweiz",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Aloan",
+            "date": "2013-05-31",
+            "time": "18:45",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/aloan",
+            "source_id": "13702",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Ewert And The Two Dragons",
+            "date": "2013-05-31",
+            "time": "19:45",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/ewert-and-the-two-dragons",
+            "source_id": "28295",
+            "origin": "Estland",
+            "genre": "Indie-Folk",
+            "social_links": [
+                {
+                    "link_icon": "",
+                    "link_label": "Website",
+                    "url": "https://www.ewertandthetwodragons.com"
+                }
+            ],
+            "image_url": ""
+        },
+        {
+            "name": "Aloan",
+            "date": "2013-05-31",
+            "time": "20:45",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/aloan",
+            "source_id": "13702",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Belleruche",
+            "date": "2013-05-31",
+            "time": "21:45",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/belleruche",
+            "source_id": "14107",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Pirmin Huber",
+            "date": "2013-06-01",
+            "time": "16:50",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/pirmin-huber",
+            "source_id": "33324",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Mama Rosin",
+            "date": "2013-06-01",
+            "time": "17:50",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/mama-rosin",
+            "source_id": "18228",
+            "origin": "Schweiz",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Budzillus",
+            "date": "2013-06-01",
+            "time": "18:50",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/budzillus",
+            "source_id": "25063",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Me.Man.Machine",
+            "date": "2013-06-01",
+            "time": "19:50",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/me-man-machine",
+            "source_id": "29418",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Evelinn Trouble",
+            "date": "2013-06-01",
+            "time": "20:50",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/evelinn-trouble",
+            "source_id": "13717",
+            "origin": "Schweiz",
+            "genre": "",
+            "social_links": [
+                {
+                    "link_icon": "",
+                    "link_label": "Website",
+                    "url": "https://www.evelinntrouble.com/"
+                },
+                {
+                    "link_icon": "",
+                    "link_label": "Instagram",
+                    "url": "https://www.instagram.com/evelinntrouble/?hl=de"
+                },
+                {
+                    "link_icon": "",
+                    "link_label": "Facebook",
+                    "url": "https://www.facebook.com/evelinntrouble/?locale=de_DE"
+                }
+            ],
+            "image_url": "https://www.openairguide.net/img/1200/evelinn-trouble.jpg"
+        },
+        {
+            "name": "Me.Man.Machine",
+            "date": "2013-06-01",
+            "time": "21:50",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/me-man-machine",
+            "source_id": "29418",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "We Have Band",
+            "date": "2013-06-01",
+            "time": "22:50",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/we-have-band",
+            "source_id": "16455",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        }
+    ],
+    "2012": [
+        {
+            "name": "Alvin Zealot",
+            "date": "",
+            "time": "",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/alvin-zealot",
+            "source_id": "16821",
+            "origin": "Schweiz",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Anna Kaenzig",
+            "date": "",
+            "time": "",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/anna-kaenzig",
+            "source_id": "26803",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Carrousel",
+            "date": "",
+            "time": "",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/carrousel",
+            "source_id": "18651",
+            "origin": "Schweiz",
+            "genre": "Pop",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Coldeve",
+            "date": "",
+            "time": "",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/coldeve",
+            "source_id": "21163",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Dabu Fantastic",
+            "date": "",
+            "time": "",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/dabu-fantastic",
+            "source_id": "21945",
+            "origin": "Schweiz",
+            "genre": "Pop",
+            "social_links": [
+                {
+                    "link_icon": "",
+                    "link_label": "Website",
+                    "url": "https://dabufantastic.ch/"
+                },
+                {
+                    "link_icon": "",
+                    "link_label": "Instagram",
+                    "url": "https://www.instagram.com/dabufantastic/?hl=de"
+                },
+                {
+                    "link_icon": "",
+                    "link_label": "YouTube",
+                    "url": "https://www.youtube.com/channel/UCTB7mdyAxm8jF97cSuVxDpA"
+                },
+                {
+                    "link_icon": "",
+                    "link_label": "Facebook",
+                    "url": "https://www.facebook.com/dabufantastic/"
+                },
+                {
+                    "link_icon": "",
+                    "link_label": "Website",
+                    "url": "https://www.tiktok.com/@dabu_fantastic"
+                }
+            ],
+            "image_url": "https://www.openairguide.net/img/1200/dabu-fantastic.jpg"
+        },
+        {
+            "name": "Ongatu",
+            "date": "",
+            "time": "",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/ongatu",
+            "source_id": "23398",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Stereo Total",
+            "date": "2012-06-01",
+            "time": "",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/stereo-total",
+            "source_id": "21337",
+            "origin": "Deutschland / Frankreich",
+            "genre": "Underground-Elektropop",
+            "social_links": [
+                {
+                    "link_icon": "",
+                    "link_label": "Website",
+                    "url": "https://www.stereototal.de"
+                }
+            ],
+            "image_url": ""
+        },
+        {
+            "name": "Fatboy",
+            "date": "2012-06-02",
+            "time": "",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/fatboy",
+            "source_id": "29178",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Jeans Team",
+            "date": "2012-06-02",
+            "time": "",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/jeans-team",
+            "source_id": "15593",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Lo Fat Orchestra",
+            "date": "2012-06-02",
+            "time": "",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/lo-fat-orchestra",
+            "source_id": "29156",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        }
+    ],
+    "2011": [
+        {
+            "name": "Charlotte Parfois",
+            "date": "2011-05-27",
+            "time": "",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/charlotte-parfois",
+            "source_id": "14123",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Das Pop",
+            "date": "2011-05-27",
+            "time": "",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/das-pop",
+            "source_id": "14139",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Fiona Daniel",
+            "date": "2011-05-27",
+            "time": "",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/fiona-daniel",
+            "source_id": "18574",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Rusconi",
+            "date": "2011-05-27",
+            "time": "",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/rusconi",
+            "source_id": "15885",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Annakin",
+            "date": "2011-05-28",
+            "time": "",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/annakin",
+            "source_id": "18576",
+            "origin": "Schweiz",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "George Vaine",
+            "date": "2011-05-28",
+            "time": "",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/george-vaine",
+            "source_id": "25659",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Kalabrese & Rumpelorchester",
+            "date": "2011-05-28",
+            "time": "",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/kalabrese-rumpelorchester",
+            "source_id": "24713",
+            "origin": "Schweiz",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Mundartisten",
+            "date": "2011-05-28",
+            "time": "",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/mundartisten",
+            "source_id": "23066",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "The Mekons",
+            "date": "2011-05-28",
+            "time": "",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/the-mekons",
+            "source_id": "24197",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "The Sadies",
+            "date": "2011-05-28",
+            "time": "",
+            "stage": "",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/the-sadies",
+            "source_id": "24574",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        }
+    ],
+    "2010": [
+        {
+            "name": "Blue Grass Boogiemen",
+            "date": "2010-06-04",
+            "time": "",
+            "stage": "Hauptbühne",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/blue-grass-boogiemen",
+            "source_id": "23336",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Dee Day Dub",
+            "date": "2010-06-04",
+            "time": "",
+            "stage": "Zeltbühne",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/dee-day-dub",
+            "source_id": "22674",
+            "origin": "Schweiz",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "My Heart Belongs To Cecilia Winter",
+            "date": "2010-06-04",
+            "time": "",
+            "stage": "Hauptbühne",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/my-heart-belongs-to-cecilia-winter",
+            "source_id": "21706",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "The Clowns",
+            "date": "2010-06-04",
+            "time": "",
+            "stage": "Hauptbühne",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/the-clowns",
+            "source_id": "17077",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "C. Gibbs Review",
+            "date": "2010-06-05",
+            "time": "",
+            "stage": "Hauptbühne",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/c-gibbs-review",
+            "source_id": "23337",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Flowin Immo & Team Terrible",
+            "date": "2010-06-05",
+            "time": "",
+            "stage": "Hauptbühne",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/flowin-immo-team-terrible",
+            "source_id": "21393",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Kummerbuben",
+            "date": "2010-06-05",
+            "time": "",
+            "stage": "Hauptbühne",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/kummerbuben",
+            "source_id": "13698",
+            "origin": "Schweiz",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Paul das Pausenbrot",
+            "date": "2010-06-05",
+            "time": "",
+            "stage": "Zeltbühne",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/paul-das-pausenbrot",
+            "source_id": "23338",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Solange La Frange",
+            "date": "2010-06-05",
+            "time": "",
+            "stage": "Hauptbühne",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/solange-la-frange",
+            "source_id": "14437",
+            "origin": "Schweiz",
+            "genre": "Elektro-Punk",
+            "social_links": [
+                {
+                    "link_icon": "",
+                    "link_label": "Website",
+                    "url": "https://www.solangelafrange.ch"
+                }
+            ],
+            "image_url": ""
+        },
+        {
+            "name": "Swatka City",
+            "date": "2010-06-05",
+            "time": "",
+            "stage": "Hauptbühne",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/swatka-city",
+            "source_id": "21929",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        },
+        {
+            "name": "Yakari",
+            "date": "2010-06-05",
+            "time": "",
+            "stage": "Hauptbühne",
+            "source_url": "https://www.openairguide.net/festivals/schweiz/stolze-openair/yakari",
+            "source_id": "21705",
+            "origin": "",
+            "genre": "",
+            "social_links": [],
+            "image_url": ""
+        }
+    ]
+}
