@@ -132,6 +132,41 @@ $fallback_logo = STOLZE_URI . '/assets/stolze_2024_logo.png';
 		<?php stolze_partner_grid( $foodtrucks, 'foodtrucks-grid' ); ?>
 	<?php endif; ?>
 
+	<?php /* Shop — newest year only */ ?>
+	<?php
+	$stolze_latest   = stolze_latest_year();
+	$stolze_is_latest = $stolze_latest && (int) $stolze_latest->ID === (int) $jahr->ID;
+	$shop_products    = ( $stolze_is_latest && function_exists( 'wc_get_products' ) ) ? wc_get_products(
+		array(
+			'limit'   => 3,
+			'orderby' => 'date',
+			'order'   => 'DESC',
+			'status'  => 'publish',
+		)
+	) : array();
+	if ( ! empty( $shop_products ) ) :
+		?>
+		<?php stolze_section_title( 'Shop', $logo_url ); ?>
+		<div class="shop-grid">
+			<div class="grid">
+				<div class="grid__inner" x-data="festivalGrid" data-max-cols="3" data-single-mobile="1">
+					<div class="grid-row">
+						<?php
+						foreach ( $shop_products as $shop_product ) {
+							stolze_product_card( $shop_product );
+						}
+						?>
+					</div>
+				</div>
+			</div>
+		</div>
+		<p class="section-action">
+			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>">
+				<span class="button"><span class="button__inner">Zum Shop</span></span>
+			</a>
+		</p>
+	<?php endif; ?>
+
 	<?php /* Gallery */ ?>
 	<?php
 			$gallery_urls = array();
@@ -161,7 +196,7 @@ $fallback_logo = STOLZE_URI . '/assets/stolze_2024_logo.png';
 			}
 			?>
 				<div class="grid">
-					<div class="grid__inner">
+					<div class="grid__inner" x-data="festivalGrid" data-max-cols="4">
 						<?php foreach ( array_chunk( $cells, 4 ) as $row ) : ?>
 							<div class="grid-row">
 								<?php foreach ( $row as $cell ) : ?>

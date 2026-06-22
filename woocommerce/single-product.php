@@ -51,13 +51,7 @@ while ( have_posts() ) :
 	$first_alt = ! empty( $gallery ) ? $gallery[0]['alt'] : $product->get_name();
 	?>
 	<div class="single-product">
-		<div class="back-to-shop">
-			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>">&larr; Zurück zum Shop</a>
-		</div>
-
-		<div class="product-notices">
-			<?php do_action( 'woocommerce_before_single_product' ); ?>
-		</div>
+		<a class="back-link" href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>">&larr; Zurück zum Shop</a>
 
 		<div class="product-top">
 			<div class="product-gallery" x-data="{ current: <?php echo esc_attr( wp_json_encode( $first ) ); ?>, currentAlt: <?php echo esc_attr( wp_json_encode( $first_alt ) ); ?> }">
@@ -80,6 +74,9 @@ while ( have_posts() ) :
 			</div>
 
 			<div class="product-summary">
+				<div class="product-notices">
+					<?php do_action( 'woocommerce_before_single_product' ); ?>
+				</div>
 				<h1 class="product-summary__title"><?php the_title(); ?></h1>
 				<div class="product-summary__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>
 
@@ -90,10 +87,6 @@ while ( have_posts() ) :
 				<div class="product-summary__cart">
 					<?php woocommerce_template_single_add_to_cart(); ?>
 				</div>
-
-				<?php if ( wc_get_page_id( 'cart' ) > 0 ) : ?>
-					<a class="product-summary__cart-link" href="<?php echo esc_url( wc_get_cart_url() ); ?>">Zum Warenkorb &rarr;</a>
-				<?php endif; ?>
 
 				<?php if ( $product->get_description() ) : ?>
 					<section class="product-description">
@@ -109,7 +102,7 @@ while ( have_posts() ) :
 		$stolze_sp_logo = $stolze_sp_year ? stolze_image_url( get_field( 'logo', $stolze_sp_year->ID ), 'large' ) : '';
 		$stolze_related = function_exists( 'wc_get_products' ) ? wc_get_products(
 			array(
-				'limit'   => 4,
+				'limit'   => 3,
 				'exclude' => array( $product->get_id() ),
 				'orderby' => 'date',
 				'order'   => 'DESC',
@@ -122,7 +115,7 @@ while ( have_posts() ) :
 				<?php stolze_section_title( 'Weitere Produkte', $stolze_sp_logo ); ?>
 				<div class="shop-grid">
 					<div class="grid">
-						<div class="grid__inner">
+						<div class="grid__inner" x-data="festivalGrid" data-max-cols="3" data-single-mobile="1">
 								<div class="grid-row">
 									<?php
 									foreach ( $stolze_related as $stolze_rp ) {

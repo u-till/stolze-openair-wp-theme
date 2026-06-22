@@ -202,7 +202,7 @@ function stolze_partner_grid( $posts, $wrapper_class ) {
 	?>
 	<div class="<?php echo esc_attr( $wrapper_class ); ?>">
 		<div class="grid">
-			<div class="grid__inner">
+			<div class="grid__inner" x-data="festivalGrid" data-max-cols="4">
 				<?php foreach ( array_chunk( $posts, 4 ) as $row ) : ?>
 					<div class="grid-row">
 						<?php
@@ -255,13 +255,11 @@ function stolze_product_card( $product ) {
 	$alt = stolze_image_alt( $product->get_image_id(), $product->get_name() );
 	?>
 	<a class="grid-item" href="<?php echo esc_url( get_permalink( $product->get_id() ) ); ?>">
+		<span class="product-card__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></span>
 		<div class="grid-item__inner">
-			<div class="product-card">
+			<div class="grid-item__content">
 				<img class="product-card__img" src="<?php echo esc_url( $img ); ?>" alt="<?php echo esc_attr( $alt ); ?>" />
-				<div class="product-card__meta">
-					<span class="product-card__name"><?php echo esc_html( $product->get_name() ); ?></span>
-					<span class="product-card__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></span>
-				</div>
+				<h3><?php echo esc_html( $product->get_name() ); ?></h3>
 			</div>
 		</div>
 	</a>

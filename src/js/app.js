@@ -55,6 +55,55 @@ Alpine.data('artistSearch', (total) => ({
 }));
 
 /**
+ * Festival grid: regroup the flat list of cells into rows that match the
+ * current column count (4 / 3 / 2 / 1 by width, capped at data-max-cols), so
+ * each `.grid-row` is exactly one visual row. That lets the row's full-width
+ * border-bottom draw an edge-to-edge horizontal line — mirroring the original
+ * site, which did the same chunking in React.
+ */
+Alpine.data('festivalGrid', () => ({
+    maxCols: 4,
+    singleMobile: false,
+    cols: 0,
+    cells: [],
+    init() {
+        this.maxCols = parseInt(this.$el.dataset.maxCols || '4', 10);
+        this.singleMobile = this.$el.dataset.singleMobile === '1';
+        this.cells = Array.from(
+            this.$el.querySelectorAll('.grid-item, .grid-item-credits')
+        );
+        // Defer the first regroup so nested Alpine bindings (e.g. the gallery
+        // lightbox buttons) finish initialising before we reparent them.
+        this.$nextTick(() => this.relayout());
+        let raf;
+        window.addEventListener('resize', () => {
+            cancelAnimationFrame(raf);
+            raf = requestAnimationFrame(() => this.relayout());
+        });
+    },
+    computeCols() {
+        const w = window.innerWidth;
+        if (this.singleMobile && w <= 768) return 1;
+        const c = w > 1024 ? 4 : w > 768 ? 3 : w > 480 ? 2 : 1;
+        return Math.min(c, this.maxCols);
+    },
+    relayout() {
+        const cols = this.computeCols();
+        if (cols === this.cols) return;
+        this.cols = cols;
+        this.$el.querySelectorAll('.grid-row').forEach((r) => r.remove());
+        for (let i = 0; i < this.cells.length; i += cols) {
+            const row = document.createElement('div');
+            row.className = 'grid-row';
+            for (let j = i; j < i + cols && j < this.cells.length; j++) {
+                row.appendChild(this.cells[j]);
+            }
+            this.$el.appendChild(row);
+        }
+    },
+}));
+
+/**
  * Gallery lightbox: open by index, navigate, close. Image URLs are read from
  * the `data-images` JSON on the root element.
  */

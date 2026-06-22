@@ -16,8 +16,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-do_action( 'woocommerce_before_main_content' );
-
 // Use the most recent year's logo in the section title, for visual continuity.
 $shop_year = stolze_latest_year();
 $shop_logo = $shop_year ? stolze_image_url( get_field( 'logo', $shop_year->ID ), 'large' ) : '';
@@ -37,8 +35,8 @@ if ( have_posts() ) {
 	<?php if ( ! empty( $shop_products ) ) : ?>
 		<div class="shop-grid">
 			<div class="grid">
-					<div class="grid__inner">
-						<?php foreach ( array_chunk( $shop_products, 4 ) as $row ) : ?>
+					<div class="grid__inner" x-data="festivalGrid" data-max-cols="3" data-single-mobile="1">
+						<?php foreach ( array_chunk( $shop_products, 3 ) as $row ) : ?>
 							<div class="grid-row">
 								<?php
 								foreach ( $row as $product ) {
